@@ -1,7 +1,7 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 viewer = Blueprint('viewer', __name__)
 
 @viewer.route('/')
 def home():
-    return "<h1>Test</h1>"
+    return render_template("home.html")
