@@ -1,0 +1,47 @@
+{% extends "base.html" %} {% block title %} Form {% endblock %}
+{% block content %}
+<br>
+<br>
+<br>
+
+
+<form action="POST">
+    <h3 align = "center"> Form Creation</h3>
+    <div class="form-group">
+        <label for="Gallons Requesting">Gallons Requesting</label>
+        <input type="Gallons Requested" class="form-control" id="Gallons Requested" name="Gallons Requested" placeholder="Enter Amount">
+    </div>
+
+    <br><br>
+
+    <div class="form-group">
+        <label for="Delivery Address">Delivery Address</label>
+        <input type="Delivery Address" class="form-control" id="Delivery Address" name="Delivery Address" placeholder="Enter Address">
+    </div>
+
+    <br><br>
+
+    <div class="form-group">
+        <label for="Delivery Date">Delivery Address</label>
+        <input type="Delivery Address" class="form-control" id="Delivery Address" name="Delivery Address" placeholder="Enter Address">
+    </div>
+
+    <br><br>
+
+    <div class="form-group">
+        <label for="Suggested Price">Suggested Price</label>
+        <input type="Suggested Price" class="form-control" id="Suggested Price" name="Suggested Price" placeholder="Price Placeholder">
+    </div>
+
+    <br><br>
+
+    <div class="form-group">
+        <label for="Total Amount">Total Amount</label>
+        <input type="Total Amount" class="form-control" id="Total Amount" name="Total Amount" placeholder="Total Amount Placeholder">
+    </div>
+
+    <br>
+    <button type = "submit" class="btn btn-primary">Place Order</button>
+
+</form>
+{% endblock %}
