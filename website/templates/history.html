@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="p-3">Quote History</h1>
+  <table id="data" class="table table-striped">
+    <thead>
+      <tr>
+        <th>User Name</th>
+        <th>User ID</th>
+        <th>Qallons Requested</th>
+        <th>Delivery Address</th>
+        <th>Delivery Date</th>
+        <th>Suggested Price / gallon</th>
+        <th>Total Amount Due</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- {% for user in users %}
+        <tr>
+          <td>{{ user.name }}</td>
+          <td>{{ user.age }}</td>
+          <td>{{ user.address }}</td>
+          <td>{{ user.phone }}</td>
+          <td>{{ user.email }}</td>
+        </tr>
+      {% endfor %} -->
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block scripts %}
+  <!-- <script>
+    $(document).ready(function () {
+      $('#data').DataTable({
+        columns: [
+          null,
+          {searchable: false},
+          {orderable: false, searchable: false},
+          {orderable: false, searchable: false},
+          null],
+      });
+    });
+  </script> -->
+{% endblock %}
