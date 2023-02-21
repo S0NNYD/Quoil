@@ -27,3 +27,7 @@ def register():
         else:
             flash('Account creation successful', category='success')
     return render_template("register.html")
+
+@authenciator.route('/form', methods=['GET', 'POST'])
+def form():
+    return render_template("form.html")
