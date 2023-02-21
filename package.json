@@ -1,0 +1,21 @@
+{
+  "name": "group-4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "git+https://github.com/xxalsgh0203/Group-4.git",
+  "author": "Minho Kim <music4537@naver.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xxalsgh0203/Group-4/issues"
+  },
+  "homepage": "https://github.com/xxalsgh0203/Group-4#readme",
+  "dependencies": {
+    "css": "^3.0.0",
+    "tailwind": "^4.0.0",
+    "tailwindcss": "^3.2.7"
+  }
+}
