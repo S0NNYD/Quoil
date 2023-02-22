@@ -31,3 +31,7 @@ def register():
 @authenciator.route('/form', methods=['GET', 'POST'])
 def form():
     return render_template("form.html")
+
+@authenciator.route('/complete', methods=['GET', 'POST'])
+def completeReg():
+    return render_template("completereg.html")
