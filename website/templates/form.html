@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %} Form {% endblock %}
+{% block content %}
+<head>
+    <title>Datepicker</title>
+    <meta charset = "utf-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqa0J5a3NMeGZvUXh0VkNZbHYwbVdFVEE2OUxpZ3xBQ3Jtc0trUzlxSjBBM29MUWUtRVRlVGlsOHBhTHB6eDFXbGU0TFhLX0VRcmxsZlc4SE9CNGh5SHUxdXdNclRHbjJ2Rk5oR0JUMGo4dzRSNkdjWm45SHRnSllDU25PRVdOd0dHeExQT3FkMHA4TUFvNW1WNTU5OA&q=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fbootstrap%404.5.3%2Fdist%2Fcss%2Fbootstrap.min.css&v=8ptKpzW-KLo">
+    <link rel="stylesheet" href="https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbEp0cWVQbWUtWUdPZmxQNjY3cU41RHlFRWE5UXxBQ3Jtc0tueDJ4Wm1acm5QbW9ET2trYlphR3FCOWZmWTRRN0FzMWxhc3BURUsteWg1V0lKRl9mNGtHSTRaUWJlT3N6U0pRSzY4TjF6blFyck0yUGtrNmFJal9kNG42Q3U1WVpvcFR3U2IxTWhscWxYTF9zY2FDOA&q=https%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Fbootstrap-datepicker%2F1.9.0%2Fcss%2Fbootstrap-datepicker.min.css&v=8ptKpzW-KLo">
+    <link rel="stylesheet" href="https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbGJ1c0xIUjJ6VUxycXM1Vkt5RS1hTVZlSnhXZ3xBQ3Jtc0tsV3Y0OHdSR1JnVUt4Z2pqYW1wNEFfLVdZNzJBNGVOT1puNEY5c3ZXalN3X2RUNW1KT3BQTS1xckdJTllRMDYzYjJBb29sQk5tdml1dWJ6VmoyTGJnNmdmM1BTZ3RiQzBJTDBqRm8xWk5pT3psME1wOA&q=https%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Ffont-awesome%2F4.7.0%2Fcss%2Ffont-awesome.min.css&v=8ptKpzW-KLo">
+    <link src="https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbFRYM3NkYVNfTXBHQWN1WWpEUF9Ba3JIZFBnd3xBQ3Jtc0trMlJFc29jUHFQaGo5OFNXV3p0ZVZFZHlIUC11YVVsekFEQUExcVNNb25RWVROY3A1NnhmYk9QTE5BZlotTTd5emJXMXNXbXFJWG5ydFFhZFd4WTd6aDdlOVFhSVBHMndVTkhUWWVzcjd3a2Q2NDJVdw&q=https%3A%2F%2Fajax.googleapis.com%2Fajax%2Flibs%2Fjquery%2F3.4.1%2Fjquery.min.js&v=8ptKpzW-KLo">
+    <link src="https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbVBVdVBuTTg1U21MdVdqV1hiZVdOcFRRdmJ2QXxBQ3Jtc0tsbTdFSjBBU2lLMEQxUjZRaC1Xem0zY0V4NFlmRFU5UEtqekJvZG5xbWVHbURsbWN3emRzRDIwSnRXNVNTNFdoeTJ3RE9RaGZrTFBlS2Fwbm1mMmt2T00wMHRmWkF0VnhxUERoc0hiVVU1ZVNYN0JtQQ&q=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fbootstrap%404.5.3%2Fdist%2Fjs%2Fbootstrap.bundle.min.js&v=8ptKpzW-KLo">
+    <link src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css">
+</head>
+
+<br>
+<br>
+<br>
+<body>
+    
+
+    <form method="POST">
+        <h3 align = "center"> Form Creation</h3>
+        <div class="form-group">
+            <label for="gallonsReq">Gallons Requesting</label>
+            <input type="Gallons Requested" class="form-control" id="gallonsReq" name="gallonsReq" placeholder="Enter Amount">
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <label for="deliveryAddr">Delivery Address</label>
+            <input type="Delivery Address" class="form-control" id="deliveryAddr" name="deliveryAddr" placeholder="Enter Address">
+        </div>
+
+        <br>
+
+        <div class="form-group">
+                <section class = "container">
+                        <div class="row form-group">
+                            <label for="date">Delivery Date</label>
+                            <div class="input-group date" id = "datepicker">
+                                <input type="text" id="datepicker">
+                                <span class = "input-group-text bg-white">
+                                    <i class = "fa fa-calendar"></i>
+                                </div>
+                            </span>
+                        </div>
+                </section>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/js/bootstrap.min.js"></script>
+                <script>
+                    $(function() {
+                        $('#datepicker').datepicker({
+                            format: 'mm/dd/yyyy'
+                        });
+                    });
+                    </script>
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <label for="suggestedPrice">Suggested Price</label>
+            <input type="Suggested Price" class="form-control" id="suggestedPrice" name="suggestedPrice" placeholder="Price Placeholder">
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <label for="totalAmount">Total Amount</label>
+            <input type="Total Amount" class="form-control" id="totalAmount" name="totalAmount" placeholder="Total Amount Placeholder">
+        </div>
+
+        <br>
+        <button type = "submit" class="btn btn-primary">Place Order</button>
+
+    </form>
+
+</body>
+{% endblock %}
