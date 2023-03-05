@@ -13,10 +13,14 @@ def logout():
 @authenciator.route('/register', methods=['GET', 'POST'])
 def register():
     #get the type of user from "id" in register.html
+    
     if request.method == 'POST':
+
         username = request.form.get('user1')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
+        
+
 
         if len(username) < 5:
             flash('Username must be greater than 5 characters.', category='error')
@@ -26,9 +30,10 @@ def register():
             flash('Password must be greater than 5 characters.', category='error')
         else:
             flash('Account creation successful', category='success')
+        print(request.form)
     return render_template("register.html")
 
-@authenciator.route('/form', methods=['GET', 'POST'])
+@authenciator.route('/form', methods=['GET','POST'])
 def form():
     return render_template("form.html")
 
