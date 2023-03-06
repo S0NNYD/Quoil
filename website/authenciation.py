@@ -44,7 +44,7 @@ def form():
 
         #catches an exception if user does not enter a valid number for numGallons.
         try:
-            x = int(numGallons)
+            testVal = int(numGallons)
         except ValueError:
             flash('Number of gallons must me a valid integer', category='error')
 
