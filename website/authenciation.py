@@ -20,10 +20,6 @@ def register():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         
-<<<<<<< HEAD
-
-=======
->>>>>>> 376c531ec9450117249d86d07da54d7f1b2f3311
         if len(username) < 5:
             flash('Username must be greater than 5 characters.', category='error')
         elif password1 != password2:
@@ -46,8 +42,9 @@ def form():
         #calculate total amount after pricing module.
 
         #catches an exception if user does not enter a valid number for numGallons.
+
         try:
-            x = int(numGallons)
+            testVal = int(numGallons)
         except ValueError:
             flash('Number of gallons must me a valid integer', category='error')
 
@@ -56,9 +53,6 @@ def form():
 
 @authenciator.route('/complete', methods=['GET', 'POST'])
 def completeReg():
-<<<<<<< HEAD
-    return render_template("completereg.html")
-=======
 
     if request.method == 'POST':
 
@@ -92,4 +86,3 @@ def completeReg():
         print("zipcode:", zipcode)
 
     return render_template("completereg.html")
->>>>>>> 376c531ec9450117249d86d07da54d7f1b2f3311
