@@ -24,13 +24,7 @@ header .logo
   text-transform: uppercase;
   cursor: pointer;
 }
-body {
-  background: url('website/media/OilVid.mp4') no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
+
 .toggle
 {
   position: relative;
