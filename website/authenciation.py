@@ -36,17 +36,17 @@ def register():
 def form():
     if request.method == 'POST':
         numGallons = request.form.get('gallonsReq')
-        address = request.form.get('deliveryAddr')
         date = request.form.get('deliveryDate')
-        
+
+        #address should not be inputed, should be retrived from client profile.
         #calculate suggest price with pricing module which will be imported later.
         #calculate total amount after pricing module.
 
+        #catches an exception if user does not enter a valid number for numGallons.
         try:
-            num = int(x)
-            print("You entered the integer:")
+            x = int(numGallons)
         except ValueError:
-            print("You did not enter a valid integer")
+            flash('Number of gallons must me a valid integer', category='error')
 
 
     return render_template("form.html")

@@ -11,4 +11,6 @@ class User(db.model, UserMixin):
     State = db.Column(db.String(150))
     Zip = db.Column(db.String(150))
 
+
+
     
