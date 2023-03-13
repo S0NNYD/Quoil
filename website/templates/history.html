@@ -15,14 +15,11 @@ body{
 }
 
 .container{
+  
   margin-top: 3%;
 }
 table{
- /* position: absolute; */
- z-index: 2;
- left: 50%;
  margin-top: 2%;
- /* transform: translate(-50%,-50%); */
  width: 90%; 
  border-collapse: collapse;
  border-spacing: 0;
@@ -51,8 +48,15 @@ tr{
 tr:nth-child(even){
  background-color: #eeeeee;
 }
+
+.delete{
+  background-color: red;
+  padding: 3px;
+  font-size: 10px;
+  color: white;
+  border-radius: 4px;
+}
   </style>
-  
   <body>
     <div class="container">
     <h3>Fuel Quote History Table</h3>
@@ -76,23 +80,34 @@ tr:nth-child(even){
             {% for quote in user.quotes %}
             <tr>
               <td>{{quote.quote_no}}</td>
-              <td>{{quote.gallons_req}}</td>
+              <td>{{quote.gallons_req}} gal</td>
               <td>{{quote.delivery_date}}</td>
               <td>{{quote.delivery_address1}} {{quote.delivery_address2}}</td>
               <td>{{quote.delivery_city}}</td>
               <td>{{quote.delivery_state}}</td>
               <td>{{quote.delivery_zipcode}}</td>
-              <td>{{quote.suggested_price}}</td>
-              <td>{{quote.total_amount}}</td>
-              <td><button>DELETE</button></td>
+              <td>{{quote.suggested_price}} $</td>
+              <td>{{quote.total_amount}} $</td>
+              <td><button class="delete" onclick="deleteQuote({{quote.quote_no}})">DELETE</button></td>
             </tr>
             {% endfor %}  
-
-       
       </tbody>
     </table>
   </div>
   </body>
+
+  <script>
+    function deleteQuote(quote_no) {
+    fetch('/delete-quote', {
+        method: 'POST',
+        body: JSON.stringify({
+            quote_no: quote_no
+        }),
+    }).then((_res) => {
+        window.location.href = "/history";
+    })
+    }
+  </script>
 {% endblock %}
 
 {% block scripts %}
