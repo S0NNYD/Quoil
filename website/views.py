@@ -10,6 +10,7 @@ def home():
 
 
 @viewer.route('/history')
+@login_required
 def history():
     return render_template("history.html", user=current_user)
 
