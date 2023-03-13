@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 
 viewer = Blueprint('viewer', __name__)
@@ -13,9 +13,3 @@ def home():
 @login_required
 def history():
     return render_template("history.html", user=current_user)
-
-
-@viewer.route('/form')
-@login_required
-def createForm():
-    return render_template("form.html", user=current_user)

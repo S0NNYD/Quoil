@@ -22,10 +22,9 @@ class User_login(db.Model, UserMixin):
 
 
 class Fuel_Quote(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     gallons_req = db.Column(db.Integer)
-    delivery_date = db.Column(db.DateTime(timezone=True), default=func.now())
+    delivery_date = db.Column(db.String(11))
     delivery_address1 = db.Column(db.String(100))
     delivery_address2 = db.Column(db.String(100))
     delivery_city = db.Column(db.String(100))
