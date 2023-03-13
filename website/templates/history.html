@@ -1,38 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <!-- <h1 class="p-3">Quote History</h1>
-  <table id="data" class="table table-striped">
-    <thead>
-      <tr>
-        <th>User Name</th>
-        <th>User ID</th>
-        <th>Qallons Requested</th>
-        <th>Delivery Address</th>
-        <th>Delivery Date</th>
-        <th>Suggested Price / gallon</th>
-        <th>Total Amount Due</th>
-      </tr>
-    </thead>
-    <tbody>
-      <ul>
-        {% for quote in user.quotes %}
-        <li>{{quote.quote_no}}</li>
-        <li>{{quote.user_id}}</li>
-        <li>{{quote.gallons_req}}</li>
-        <li>{{quote.delivery_date}}</li>
-        <li>{{quote.delivery_address1}}</li>
-        <li>{{quote.delivery_address2}}</li> 
-        <li>{{quote.delivery_city}}</li>
-        <li>{{quote.delivery_state}}</li>
-        <li>{{quote.delivery_zipcode}}</li>
-        <li>{{quote.suggested_price}}</li>
-        <li>{{quote.total_amount}}</li>
-        {% endfor %}  
-      </ul>
-    </tbody>
-  </table> -->
-
   <head>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Mukta:wght@300;400;600;700;800&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
@@ -41,44 +9,28 @@
 
   <style>
     @import url('https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto');
-*{
- margin:0;
- padding: 0;
- outline: 0;
+
+body{
+  background-color: #d6d6d6;
 }
-.filter{
- position: absolute;
- left: 0;
- top: 0;
- bottom: 0;
- right: 0;
- z-index: 1;
- background: rgb(233,76,161);
-background: -moz-linear-gradient(90deg, rgba(233,76,161,1) 0%, rgba(199,74,233,1) 100%);
-background: -webkit-linear-gradient(90deg, rgba(233,76,161,1) 0%, rgba(199,74,233,1) 100%);
-background: linear-gradient(90deg, rgba(233,76,161,1) 0%, rgba(199,74,233,1) 100%);
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e94ca1",endColorstr="#c74ae9",GradientType=1);
-opacity: .7;
+
+.container{
+  
+  margin-top: 3%;
 }
 table{
- position: absolute;
- z-index: 2;
- left: 50%;
- top: 50%;
- transform: translate(-50%,-50%);
- width: 60%; 
+ margin-top: 2%;
+ width: 90%; 
  border-collapse: collapse;
  border-spacing: 0;
  box-shadow: 0 2px 15px rgba(64,64,64,.7);
- border-radius: 12px 12px 0 0;
+ border-radius: 3px 3px 0 0;
  overflow: hidden;
 
 }
 td , th{
  padding: 15px 20px;
  text-align: center;
- 
-
 }
 th{
  background-color: #dfcf41;
@@ -96,9 +48,18 @@ tr{
 tr:nth-child(even){
  background-color: #eeeeee;
 }
+
+.delete{
+  background-color: red;
+  padding: 3px;
+  font-size: 10px;
+  color: white;
+  border-radius: 4px;
+}
   </style>
-  
   <body>
+    <div class="container">
+    <h3>Fuel Quote History Table</h3>
     <table>
       <thead>
         <tr>
@@ -111,6 +72,7 @@ tr:nth-child(even){
           <th>Delivery Zipcode</th>
           <th>Suggested Price</th>
           <th>Total Amount</th>
+          <th>DELETE</th>
         </tr>
       </thead>
       <tbody>
@@ -118,21 +80,34 @@ tr:nth-child(even){
             {% for quote in user.quotes %}
             <tr>
               <td>{{quote.quote_no}}</td>
-              <td>{{quote.gallons_req}}</td>
+              <td>{{quote.gallons_req}} gal</td>
               <td>{{quote.delivery_date}}</td>
               <td>{{quote.delivery_address1}} {{quote.delivery_address2}}</td>
               <td>{{quote.delivery_city}}</td>
               <td>{{quote.delivery_state}}</td>
               <td>{{quote.delivery_zipcode}}</td>
-              <td>{{quote.suggested_price}}</td>
-              <td>{{quote.total_amount}}</td>
+              <td>{{quote.suggested_price}} $</td>
+              <td>{{quote.total_amount}} $</td>
+              <td><button class="delete" onclick="deleteQuote({{quote.quote_no}})">DELETE</button></td>
             </tr>
             {% endfor %}  
-
-       
       </tbody>
     </table>
+  </div>
   </body>
+
+  <script>
+    function deleteQuote(quote_no) {
+    fetch('/delete-quote', {
+        method: 'POST',
+        body: JSON.stringify({
+            quote_no: quote_no
+        }),
+    }).then((_res) => {
+        window.location.href = "/history";
+    })
+    }
+  </script>
 {% endblock %}
 
 {% block scripts %}

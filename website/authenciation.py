@@ -79,7 +79,7 @@ def form():
         delivery_address1 = request.form.get('delivery_address1')
         delivery_address2 = request.form.get('delivery_address2')
         delivery_state = request.form.get('delivery_state')
-        delivery_city = request.form.get('addelivery_citydress')
+        delivery_city = request.form.get('addelivery_city')
         delivery_zipcode = request.form.get('delivery_zipcode')
         delivery_date = request.form.get('delivery_date')
         suggested_price = request.form.get('suggested_price')
