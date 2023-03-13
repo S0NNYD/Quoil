@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User, Fuel_Quote
+from .models import User, FuelQuote
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db  # database from __init__.py
@@ -61,7 +61,7 @@ def register():
             flash('Password must be greater than 5 characters.', category='error')
         else:
             new_user = User(username=username, password=generate_password_hash(
-                password1, method='sha256'))
+                password1, method='sha256'), fullname=fullname, address=address, city=city, state=state, zipcode=zipcode)
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
@@ -75,13 +75,6 @@ def register():
 @login_required
 def form():
     if request.method == 'POST':
-
-        # address should not be inputed, should be retrived from client profile.
-        # calculate suggest price with pricing module which will be imported later.
-        # calculate total amount after pricing module.
-
-        # catches an exception if user does not enter a valid number for numGallons.
-
         gallons_req = request.form.get('gallons_req')
         delivery_address1 = request.form.get('delivery_address1')
         delivery_address2 = request.form.get('delivery_address2')
@@ -92,14 +85,17 @@ def form():
         suggested_price = request.form.get('suggested_price')
         total_amount = request.form.get('total_amount')
 
-        new_quote_form = Fuel_Quote(
-            gallons_req=gallons_req, delivery_address1=delivery_address1, delivery_address2=delivery_address2,
-            delivery_state=delivery_state, delivery_city=delivery_city, delivery_zipcode=delivery_zipcode, delivery_date=delivery_date,
-            suggested_price=suggested_price, total_amount=total_amount, user_id=current_user.id)
-
-        db.session.add(new_quote_form)
-        db.session.commit()
-        flash("Quote Requested!", category='success')
+        if len(delivery_zipcode) < 1:
+            flash('Zipcode must be 5 characters.', category='error')
+        else:
+            new_quote_form = FuelQuote(
+                gallons_req=gallons_req, delivery_address1=delivery_address1, delivery_address2=delivery_address2,
+                delivery_state=delivery_state, delivery_city=delivery_city, delivery_zipcode=delivery_zipcode, delivery_date=delivery_date,
+                suggested_price=suggested_price, total_amount=total_amount, user_id=current_user.id)
+            db.session.add(new_quote_form)
+            db.session.commit()
+            flash("Quote Requested!", category='success')
+            return redirect(url_for('viewer.history'))
 
         # try:
         #     testVal = int(numGallons)

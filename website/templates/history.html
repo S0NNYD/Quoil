@@ -15,30 +15,16 @@
       </tr>
     </thead>
     <tbody>
-      <!-- {% for user in users %}
-        <tr>
-          <td>{{ user.name }}</td>
-          <td>{{ user.age }}</td>
-          <td>{{ user.address }}</td>
-          <td>{{ user.phone }}</td>
-          <td>{{ user.email }}</td>
-        </tr>
-      {% endfor %} -->
+      {{user.quotes.delivery_zipcode}}
+      <ul>
+        <!-- {% for quotes in user.fuelquote %} 
+        <li>{{quotes.gallons_req}}</li>
+        {% endfor %}   -->
+      </ul>
     </tbody>
   </table>
 {% endblock %}
 
 {% block scripts %}
-  <!-- <script>
-    $(document).ready(function () {
-      $('#data').DataTable({
-        columns: [
-          null,
-          {searchable: false},
-          {orderable: false, searchable: false},
-          {orderable: false, searchable: false},
-          null],
-      });
-    });
-  </script> -->
+
 {% endblock %}
