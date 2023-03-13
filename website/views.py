@@ -6,15 +6,15 @@ viewer = Blueprint('viewer', __name__)
 
 @viewer.route('/')
 def home():
-    return render_template("home.html")
+    return render_template("home.html", user=current_user)
 
 
 @viewer.route('/history')
 def history():
-    return render_template("history.html")
+    return render_template("history.html", user=current_user)
 
 
 @viewer.route('/form')
 @login_required
 def createForm():
-    return render_template("form.html")
+    return render_template("form.html", user=current_user)

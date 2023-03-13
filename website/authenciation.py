@@ -24,7 +24,7 @@ def login():
         else:
             flash('Account does not exist.', category='error')
 
-    return render_template("login.html", boolean=True)
+    return render_template("login.html", user=current_user)
 
 
 @authenciator.route('/logout')
@@ -62,7 +62,7 @@ def register():
             flash('Account creation successful', category='success')
             return redirect(url_for('viewer.home'))
 
-    return render_template("register.html")
+    return render_template("register.html", user=current_user)
 
 
 @authenciator.route('/form', methods=['GET', 'POST'])
