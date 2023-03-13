@@ -40,9 +40,14 @@ def register():
 
     if request.method == 'POST':
 
-        username = request.form.get('user1')
+        username = request.form.get('username')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
+        fullname = request.form.get('fullname')
+        address = request.form.get('address')
+        city = request.form.get('city')
+        state = request.form.get('state')
+        zipcode = request.form.get('zipcode')
 
         user = User.query.filter_by(username=username).first()
         if user:
@@ -58,7 +63,7 @@ def register():
                 password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
-            login_user(user, remember=True)
+            login_user(new_user, remember=True)
             flash('Account creation successful', category='success')
             return redirect(url_for('viewer.home'))
 

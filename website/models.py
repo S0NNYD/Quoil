@@ -8,11 +8,10 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     # fullName = db.Column(db.String(50))
-    # Address1 = db.Column(db.String(100))
-    # Address2 = db.Column(db.String(100))
-    # City = db.Column(db.String(100))
-    # State = db.Column(db.String(2))
-    # Zip = db.Column(db.String(9))
+    # address = db.Column(db.String(100))
+    # city = db.Column(db.String(100))
+    # state = db.Column(db.String(2))
+    # zipcode = db.Column(db.String(5))
     quotes = db.relationship('Fuel_Quote')
 
 
