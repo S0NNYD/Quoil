@@ -13,7 +13,7 @@ class User(db.Model, UserMixin):
     # City = db.Column(db.String(100))
     # State = db.Column(db.String(2))
     # Zip = db.Column(db.String(9))
-    # quotes = db.relationship('Fuel_Quote')
+    quotes = db.relationship('Fuel_Quote')
 
 
 class User_login(db.Model, UserMixin):
