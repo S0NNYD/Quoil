@@ -82,12 +82,22 @@ def form():
 
         # catches an exception if user does not enter a valid number for numGallons.
 
-        try:
-            testVal = int(numGallons)
-        except ValueError:
-            flash('Number of gallons must me a valid integer', category='error')
+        gallons_req = request.form.get('gallons_req')
+        delivery_address1 = request.form.get('delivery_address1')
+        delivery_address2 = request.form.get('delivery_address2')
+        delivery_state = request.form.get('delivery_state')
+        delivery_city = request.form.get('addelivery_citydress')
+        delivery_zipcode = request.form.get('delivery_zipcode')
+        delivery_date = request.form.get('delivery_date')
+        suggested_price = request.form.get('suggested_price')
+        total_amount = request.form.get('total_amount')
 
-    return render_template("form.html")
+        # try:
+        #     testVal = int(numGallons)
+        # except ValueError:
+        #     flash('Number of gallons must me a valid integer', category='error')
+
+    return render_template("form.html", user=current_user)
 
 
 @authenciator.route('/complete', methods=['GET', 'POST'])
