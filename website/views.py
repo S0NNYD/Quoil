@@ -9,7 +9,7 @@ def home():
     return render_template("home.html", user=current_user)
 
 
-@viewer.route('/history')
+@viewer.route('/history', methods=['GET', 'POST'])
 @login_required
 def history():
     return render_template("history.html", user=current_user)

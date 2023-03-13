@@ -20,7 +20,7 @@ def createApp():
     app.register_blueprint(viewer, url_prefix='/')
     app.register_blueprint(authenciator, url_prefix='/')
 
-    from .models import User, Fuel_Quote
+    from .models import User
 
     create_database(app)
 
