@@ -1,64 +1,73 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <head>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Mukta:wght@300;400;600;700;800&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
 
-  </head>
+<head>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Mukta:wght@300;400;600;700;800&family=Noto+Sans:wght@400;700&display=swap"
+    rel="stylesheet">
 
-  <style>
-    @import url('https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto');
+</head>
 
-body{
-  background-color: #d6d6d6;
-}
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto');
 
-.container{
-  
-  margin-top: 3%;
-}
-table{
- margin-top: 2%;
- width: 90%; 
- border-collapse: collapse;
- border-spacing: 0;
- box-shadow: 0 2px 15px rgba(64,64,64,.7);
- border-radius: 3px 3px 0 0;
- overflow: hidden;
+  body {
+    background-color: #d6d6d6;
+  }
 
-}
-td , th{
- padding: 15px 20px;
- text-align: center;
-}
-th{
- background-color: #dfcf41;
- color: #fafafa;
- font-family: 'Open Sans',Sans-serif;
- font-weight: 200;
- text-transform: uppercase;
+  .container {
+    width: 100vw;
+    margin-top: 3%;
+  }
 
-}
-tr{
- width: 100%;
- background-color: #fafafa;
- font-family: 'Montserrat', sans-serif;
-}
-tr:nth-child(even){
- background-color: #eeeeee;
-}
+  table {
+    margin-top: 2%;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    box-shadow: 0 2px 15px rgba(64, 64, 64, .7);
+    border-radius: 3px 3px 0 0;
+    overflow: hidden;
 
-.delete{
-  background-color: red;
-  padding: 3px;
-  font-size: 10px;
-  color: white;
-  border-radius: 4px;
-}
-  </style>
-  <body>
-    <div class="container">
+  }
+
+  td,
+  th {
+    padding: 15px 20px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #dfcf41;
+    color: #fafafa;
+    font-family: 'Open Sans', Sans-serif;
+    font-weight: 200;
+    text-transform: uppercase;
+
+  }
+
+  tr {
+    background-color: #fafafa;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  tr:nth-child(even) {
+    background-color: #eeeeee;
+  }
+
+  .delete {
+    background-color: red;
+    padding: 3px;
+    font-size: 10px;
+    color: white;
+    border-radius: 4px;
+  }
+</style>
+
+<body>
+  <div class="container">
     <h3>Fuel Quote History Table</h3>
     <table>
       <thead>
@@ -77,37 +86,37 @@ tr:nth-child(even){
       </thead>
       <tbody>
 
-            {% for quote in user.quotes %}
-            <tr>
-              <td>{{quote.quote_no}}</td>
-              <td>{{quote.gallons_req}} gal</td>
-              <td>{{quote.delivery_date}}</td>
-              <td>{{quote.delivery_address1}} {{quote.delivery_address2}}</td>
-              <td>{{quote.delivery_city}}</td>
-              <td>{{quote.delivery_state}}</td>
-              <td>{{quote.delivery_zipcode}}</td>
-              <td>{{quote.suggested_price}} $</td>
-              <td>{{quote.total_amount}} $</td>
-              <td><button class="delete" onclick="deleteQuote({{quote.quote_no}})">DELETE</button></td>
-            </tr>
-            {% endfor %}  
+        {% for quote in user.quotes %}
+        <tr>
+          <td>{{quote.quote_no}}</td>
+          <td>{{quote.gallons_req}} gal</td>
+          <td>{{quote.delivery_date}}</td>
+          <td>{{quote.delivery_address1}} {{quote.delivery_address2}}</td>
+          <td>{{quote.delivery_city}}</td>
+          <td>{{quote.delivery_state}}</td>
+          <td>{{quote.delivery_zipcode}}</td>
+          <td>{{quote.suggested_price}} $</td>
+          <td>{{quote.total_amount}} $</td>
+          <td><button class="delete" onclick="deleteQuote({{quote.quote_no}})">DELETE</button></td>
+        </tr>
+        {% endfor %}
       </tbody>
     </table>
   </div>
-  </body>
+</body>
 
-  <script>
-    function deleteQuote(quote_no) {
+<script>
+  function deleteQuote(quote_no) {
     fetch('/delete-quote', {
-        method: 'POST',
-        body: JSON.stringify({
-            quote_no: quote_no
-        }),
+      method: 'POST',
+      body: JSON.stringify({
+        quote_no: quote_no
+      }),
     }).then((_res) => {
-        window.location.href = "/history";
+      window.location.href = "/history";
     })
-    }
-  </script>
+  }
+</script>
 {% endblock %}
 
 {% block scripts %}
