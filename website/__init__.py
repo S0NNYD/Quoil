@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
+from flask_login import LoginManager
 
 # creating a database
 db = SQLAlchemy()
@@ -22,6 +23,14 @@ def createApp():
     from .models import User, Fuel_Quote
 
     create_database(app)
+
+    login_manager = LoginManager()
+    login_manager.login_view = 'authenciator.login'
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(id):
+        return models.User.query.get(int(id))
 
     return app
 
