@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
+from .models import User, Fuel_Quote
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db  # database from __init__.py
+from datetime import datetime
 
 authenciator = Blueprint('authenciator', __name__)
 
@@ -71,10 +72,9 @@ def register():
 
 
 @authenciator.route('/form', methods=['GET', 'POST'])
+@login_required
 def form():
     if request.method == 'POST':
-        numGallons = request.form.get('gallonsReq')
-        date = request.form.get('deliveryDate')
 
         # address should not be inputed, should be retrived from client profile.
         # calculate suggest price with pricing module which will be imported later.
@@ -92,6 +92,15 @@ def form():
         suggested_price = request.form.get('suggested_price')
         total_amount = request.form.get('total_amount')
 
+        new_quote_form = Fuel_Quote(
+            gallons_req=gallons_req, delivery_address1=delivery_address1, delivery_address2=delivery_address2,
+            delivery_state=delivery_state, delivery_city=delivery_city, delivery_zipcode=delivery_zipcode, delivery_date=delivery_date,
+            suggested_price=suggested_price, total_amount=total_amount, user_id=current_user.id)
+
+        db.session.add(new_quote_form)
+        db.session.commit()
+        flash("Quote Requested!", category='success')
+
         # try:
         #     testVal = int(numGallons)
         # except ValueError:
@@ -100,7 +109,7 @@ def form():
     return render_template("form.html", user=current_user)
 
 
-@authenciator.route('/complete', methods=['GET', 'POST'])
+@ authenciator.route('/complete', methods=['GET', 'POST'])
 def completeReg():
 
     if request.method == 'POST':
@@ -113,11 +122,14 @@ def completeReg():
         zipcode = request.form.get('zipcode')
 
         if len(fullName) > 50:
-            flash('Full Name cannot be longer than 50 characters', category='error')
+            flash('Full Name cannot be longer than 50 characters',
+                  category='error')
         elif len(addr1) > 100:
-            flash('Address 1 cannot be longer than 100 characters', category='error')
+            flash('Address 1 cannot be longer than 100 characters',
+                  category='error')
         elif len(addr2) > 100:
-            flash('Address 2 cannot be longer than 100 characters', category='error')
+            flash('Address 2 cannot be longer than 100 characters',
+                  category='error')
         elif len(city) > 100:
             flash('City cannot be longer than 100 characters', category='error')
         elif len(zipcode) > 9:
