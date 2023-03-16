@@ -177,12 +177,17 @@
             <div class="user-details">
               <div class="input-box">
                 <span class="details">Full Name</span>
-                <input type="fullname" class="form-control" id="fullname" name="fullname" placeholder="Enter your name" />
+                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Enter your full name" />
               </div> 
               <div class="input-box">
-                <span class="details">Address</span>
-                <input type="address" class="form-control" id="address" name="address"
-                  placeholder="Enter your specific Address" />
+                <span class="details">Address 1</span>
+                <input type="address" class="form-control" id="address1" name="address1"
+                  placeholder="Enter your Address" />
+              </div>
+              <div class="input-box">
+                <span class="details">Address 2</span>
+                <input type="address" class="form-control" id="address2" name="address2"
+                  placeholder="Optional" />
               </div>
               <div class="input-box">
                 <span class="details">City</span>
@@ -269,7 +274,7 @@
     </html>
   </body>
 
-
+{% endblock %}
 
 
 
@@ -383,4 +388,3 @@
 
 </form> -->
 
-{% endblock %}

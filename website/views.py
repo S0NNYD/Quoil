@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for
 from flask_login import login_required, current_user
-from .models import FuelQuote, User
+from .models import FuelQuote, User, Userlogin
 from . import db  # database from __init__.py
 import json
 
@@ -18,9 +18,6 @@ def home():
 def history():
     return render_template("history.html", user=current_user)
 
-@viewer.route('/complete', methods=['GET', 'POST'])
-def complete():
-    return render_template("completereg.html", user=current_user)
 
 
 @viewer.route('/delete-quote', methods=['POST'])

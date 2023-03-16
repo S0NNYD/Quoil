@@ -19,9 +19,10 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Logged in Successfully!', category='success')
                 if user.firstTime == True:
-                    return redirect(url_for('viewer.complete'))
+                    return redirect(url_for('authenciator.completeReg'))
                 else:
-                    return redirect(url_for('viewer.home'))
+                    login_user(user, remember=True)
+                    return redirect(url_for('viewer.home'))     
             else:
                 flash('Incorrect password, try again.', category='error')
         
@@ -49,6 +50,7 @@ def register():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
+   
         user = Userlogin.query.filter_by(username=username).first()
         if user:
             flash('Username already exists.', category='error')
@@ -63,9 +65,9 @@ def register():
                 password1, method='sha256'), firstTime = True)
             db.session.add(new_user)
             db.session.commit()
-            login_user(new_user, remember=True)
+            #login_user(new_user, remember=True)
             flash('Account creation successful', category='success')
-            return redirect(url_for('viewer.home'))
+            return redirect(url_for('authenciator.login'))
 
     return render_template("register.html", user=current_user)
 
@@ -84,6 +86,11 @@ def form():
         suggested_price = request.form.get('suggested_price')
         total_amount = request.form.get('total_amount')
 
+        try:
+            testVal = int(gallons_req)
+        except ValueError:
+            flash('Number of gallons must me a valid integer', category='error')
+
         if len(delivery_zipcode) < 1:
             flash('Zipcode must be 5 characters.', category='error')
         else:
@@ -96,25 +103,24 @@ def form():
             flash("Quote Requested!", category='success')
             return redirect(url_for('viewer.history'))
 
-        # try:
-        #     testVal = int(numGallons)
-        # except ValueError:
-        #     flash('Number of gallons must me a valid integer', category='error')
+        
 
     return render_template("form.html", user=current_user)
 
 
-@ authenciator.route('/complete', methods=['GET', 'POST'])
+@authenciator.route('/complete', methods=['GET', 'POST'])
 def completeReg():
 
     if request.method == 'POST':
 
-        fullName = request.form.get('fullName')
+        fullName = request.form.get('fullname')
         addr1 = request.form.get('address1')
         addr2 = request.form.get('address2')
         city = request.form.get('city')
         state = request.form.get('state-dropdown')
         zipcode = request.form.get('zipcode')
+
+        
 
         if len(fullName) > 50:
             flash('Full Name cannot be longer than 50 characters',
@@ -134,11 +140,4 @@ def completeReg():
         else:
             flash('Account creation successful', category='success')
 
-        print("fullName:", fullName)
-        print("addr1:", addr1)
-        print("addr2:", addr2)
-        print("city:", city)
-        print("state:", state)
-        print("zipcode:", zipcode)
-
-    return render_template("completereg.html")
+    return render_template("completereg.html", user = current_user)
