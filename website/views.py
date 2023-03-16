@@ -19,7 +19,6 @@ def history():
     return render_template("history.html", user=current_user)
 
 
-
 @viewer.route('/delete-quote', methods=['POST'])
 def delete_quote():
     quote = json.loads(request.data)
