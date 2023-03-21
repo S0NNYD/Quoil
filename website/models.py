@@ -3,15 +3,23 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 
 
-class User(db.Model, UserMixin):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fullname = db.Column(db.String(50))
     address = db.Column(db.String(100))
+    address2 = db.Column(db.String(100))
     city = db.Column(db.String(100))
     state = db.Column(db.String(2))
     zipcode = db.Column(db.String(5))
     quotes = db.relationship('FuelQuote')
-    first = db.Column(db.Boolean, db.ForeignKey('userlogin.firstTime'))
+    loginId = db.Column(db.Integer, db.ForeignKey('userlogin.id'))
+    userlogin = db.relationship('Userlogin', backref='user', uselist=False)
+
+    def get_first_time(self):
+        if self.userlogin:
+            return self.userlogin.firstTime
+        else:
+            return None
 
 
 class Userlogin(db.Model, UserMixin):
@@ -19,6 +27,7 @@ class Userlogin(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     firstTime = db.Column(db.Boolean)
+    
 
 
 

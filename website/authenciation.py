@@ -18,10 +18,10 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in Successfully!', category='success')
+                login_user(user, remember=True)
                 if user.firstTime == True:
                     return redirect(url_for('authenciator.completeReg'))
                 else:
-                    login_user(user, remember=True)
                     return redirect(url_for('viewer.home'))     
             else:
                 flash('Incorrect password, try again.', category='error')
@@ -45,6 +45,7 @@ def register():
     # get the type of user from "id" in register.html
 
     if request.method == 'POST':
+        
 
         username = request.form.get('username')
         password1 = request.form.get('password1')
@@ -65,7 +66,6 @@ def register():
                 password1, method='sha256'), firstTime = True)
             db.session.add(new_user)
             db.session.commit()
-            #login_user(new_user, remember=True)
             flash('Account creation successful', category='success')
             return redirect(url_for('authenciator.login'))
 
@@ -75,6 +75,8 @@ def register():
 @authenciator.route('/form', methods=['GET', 'POST'])
 @login_required
 def form():
+    if current_user.firstTime == True:
+        return redirect(url_for('authenciator.completeReg'))
     if request.method == 'POST':
         gallons_req = request.form.get('gallons_req')
         delivery_address1 = request.form.get('delivery_address1')
@@ -138,6 +140,15 @@ def completeReg():
         elif len(zipcode) < 5:
             flash('Zipcode cannot be shorter than 5 characters', category='error')
         else:
+            newUser = User(
+                fullname = fullName, address = addr1, address2 = addr2,
+                city = city, state = state, zipcode = zipcode, loginId = current_user.id
+            )
+            current_user.firstTime = False
+            db.session.add(newUser)
+            db.session.commit()
             flash('Account creation successful', category='success')
+            return redirect(url_for('viewer.home'))
+    
 
     return render_template("completereg.html", user = current_user)

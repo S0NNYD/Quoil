@@ -30,7 +30,7 @@ def createApp():
 
     @login_manager.user_loader
     def load_user(id):
-        return models.Userlogin.query.get(int(id))
+        return Userlogin.query.get(id)
 
     return app
 
