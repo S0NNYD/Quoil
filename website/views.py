@@ -16,7 +16,6 @@ def home():
 @viewer.route('/history', methods=['GET', 'POST'])
 @login_required
 def history():
-    
     if current_user.firstTime == True:
         return redirect(url_for('authenciator.completeReg'))
     return render_template("history.html", user=current_user)
