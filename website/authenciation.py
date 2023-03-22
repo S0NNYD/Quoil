@@ -76,6 +76,7 @@ def register():
 @login_required
 def form():
     if current_user.firstTime == True:
+        flash('Please complete your registration', category='error')
         return redirect(url_for('authenciator.completeReg'))
     if request.method == 'POST':
         gallons_req = request.form.get('gallons_req')
@@ -88,13 +89,11 @@ def form():
         suggested_price = request.form.get('suggested_price')
         total_amount = request.form.get('total_amount')
 
-        try:
-            testVal = int(gallons_req)
-        except ValueError:
-            flash('Number of gallons must me a valid integer', category='error')
 
         if len(delivery_zipcode) < 1:
             flash('Zipcode must be 5 characters.', category='error')
+        elif gallons_req.isdigit() != True:
+            flash('Number of gallons must me a valid integer', category='error')
         else:
             new_quote_form = FuelQuote(
                 gallons_req=gallons_req, delivery_address1=delivery_address1, delivery_address2=delivery_address2,
