@@ -118,10 +118,10 @@ def completeReg():
         addr1 = request.form.get('address1')
         addr2 = request.form.get('address2')
         city = request.form.get('city')
-        state = request.form.get('state-dropdown')
+        state = request.form.get('statedropdown')
         zipcode = request.form.get('zipcode')
 
-        
+        print(state)
 
         if len(fullName) > 50:
             flash('Full Name cannot be longer than 50 characters',
