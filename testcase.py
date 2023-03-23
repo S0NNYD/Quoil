@@ -247,12 +247,10 @@ class TestReg(unittest.TestCase):
 class TestCompleteReg(unittest.TestCase):
     def setUp(self):
         self.app = create_app()
-        self.app.testing = True
-        self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
+        self.client = self.app.test_client()
         db.create_all()
-
         self.user = Userlogin(username='testuser', password=generate_password_hash('testpass', method='sha256'), firstTime=True)
         db.session.add(self.user)
         db.session.commit()
@@ -260,25 +258,113 @@ class TestCompleteReg(unittest.TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+        self.app_context.pop()
 
-    def testSucess(self):
+    def test_completeReg_error_name(self):
         with self.client:
             response = self.client.post('/complete', data=dict(
-                fullname = 'Test Name',
-                address1 = '12345 test dr',
-                address2 = '111 extra dr',
-                city = 'testcity',
-                state = 'TX',
-                zipcode = '123456',
+                fullname="John DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn Doe",
+                address1="123 Main Street",
+                address2="Apt 4B",
+                city="New York",
+                statedropdown="NY",
+                zipcode="100"
+            ), follow_redirects=True)
+            self.assertIn('Full Name cannot be longer than 50 characters', response.data.decode())
+
+    def test_completeReg_error_addr(self):
+        with self.client:
+            response = self.client.post('/complete', data=dict(
+                fullname="John",
+                address1="123 Main Street John DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn Doe",
+                address2="Apt 4B",
+                city="New York",
+                statedropdown="NY",
+                zipcode="100"
+            ), follow_redirects=True)
+            self.assertIn('Address 1 cannot be longer than 100 characters', response.data.decode())
+    
+    def test_completeReg_error_addr2(self):
+        with self.client:
+            response = self.client.post('/complete', data=dict(
+                fullname="John",
+                address1="123 Main Street",
+                address2="Apt 4B 123 Main Street John DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn Doe",
+                city="New York",
+                statedropdown="NY",
+                zipcode="100"
+            ), follow_redirects=True)
+            self.assertIn('Address 2 cannot be longer than 100 characters', response.data.decode())
+
+    def test_completeReg_error_city(self):
+        with self.client:
+            response = self.client.post('/complete', data=dict(
+                fullname="John",
+                address1="123 Main Street",
+                address2="Apt 4B",
+                city="New York 123 Main Street John DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn Doe",
+                statedropdown="NY",
+                zipcode="100"
+            ), follow_redirects=True)
+            self.assertIn('City cannot be longer than 100 characters', response.data.decode())
+
+    def test_completeReg_error_zip2(self):
+        with self.client:
+            response = self.client.post('/complete', data=dict(
+                fullname="John",
+                address1="123 Main Street",
+                address2="Apt 4B",
+                city="New York",
+                statedropdown="NY",
+                zipcode="1000001100"
+            ), follow_redirects=True)
+            self.assertIn('Zipcode cannot be longer than 9 characters', response.data.decode())
+
+    def test_completeReg_error_zip1(self):
+        with self.client:
+            response = self.client.post('/complete', data=dict(
+                fullname="John",
+                address1="123 Main Street",
+                address2="Apt 4B",
+                city="New York",
+                statedropdown="NY",
+                zipcode="100"
+            ), follow_redirects=True)
+            self.assertIn('Zipcode cannot be shorter than 5 characters', response.data.decode())
+
+    def test_completeReg_success(self):
+        with self.client:
+
+            self.client.post('/login', data=dict(
+                username='testuser',
+                password='testpass'
             ), follow_redirects=True)
 
+            response = self.client.post('/complete', data=dict(
+                fullname='Test User',
+                address1='123 Main St',
+                address2='1234 main st',
+                city='San Francisco',
+                statedropdown='TX',
+                zipcode='9410561'
+            ), follow_redirects=True)
+
+            myUser = Userlogin.query.filter_by(username = 'testuser').first()
+            self.assertIsNotNone(myUser.userInfo)
+            self.assertEqual(myUser.userInfo.fullname, 'Test User')
+            self.assertEqual(myUser.userInfo.address, '123 Main St')
+            self.assertEqual(myUser.userInfo.address2, '1234 main st')
+            self.assertEqual(myUser.userInfo.state, 'TX')
+            self.assertEqual(myUser.userInfo.zipcode, '9410561')
+
+            self.assertFalse(self.user.firstTime)
             
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'Qoil', response.data)
 
 
 
 
-
-    
-
+            
 if __name__ == '__main__':
     unittest.main()
