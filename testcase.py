@@ -6,6 +6,7 @@ from website.authenciation import completeReg
 from website.pricing import pricing
 from unittest.mock import patch
 from flask_login import current_user
+from flask_testing import TestCase
 
 class TestPricing(unittest.TestCase):
 
@@ -86,7 +87,107 @@ class LoginTestCase(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
             #self.assertEqual(response.location, url_for('authenciator.login', _external=True))
 
+class TestReg(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app()
+        self.app.testing = True
+        self.client = self.app.test_client()
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
 
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+
+    def test_registration_success(self):
+        # simulate user input
+        with self.client:
+            response = self.client.post('/register', data=dict(
+                username='testuser',
+                password1='testpassword',
+                password2='testpassword'
+            ), follow_redirects=True)
+
+            # check if user is added to database
+            user = Userlogin.query.filter_by(username='testuser').first()
+            self.assertIsNotNone(user)
+
+            # check if success message is displayed
+            self.assertIn(b'Account creation successful', response.data)
+
+            # check if redirected to login page
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'login', response.data)
+
+    def test_username_exists(self):
+        # simulate user input
+        existing = Userlogin(username='existinguser', password='testpassword')
+        db.session.add(existing)
+        db.session.commit()
+        with self.client:
+            response = self.client.post('/register', data=dict(
+                username='existinguser',
+                password1='testpassword',
+                password2='testpassword'
+            ), follow_redirects=True)
+
+            # check if error message is displayed
+            self.assertIn(b'Username already exists.', response.data)
+
+            # check if not redirected
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'Register', response.data)
+
+    def test_username_length(self):
+        # simulate user input
+        with self.client:
+            response = self.client.post('/register', data=dict(
+                username='tiny',
+                password1='testpassword',
+                password2='testpassword'
+            ), follow_redirects=True)
+
+            # check if error message is displayed
+            self.assertIn(b'Username must be atleast 5 characters.', response.data)
+
+            # check if not redirected
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'Register', response.data)
+
+    def test_password_match(self):
+        # simulate user input
+        with self.client:
+            response = self.client.post('/register', data=dict(
+                username='testuser',
+                password1='testpassword',
+                password2='differentpassword'
+            ), follow_redirects=True)
+
+            # check if error message is displayed
+            self.assertIn(b'Passwords do not match.', response.data)
+
+            # check if not redirected
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'Register', response.data)
+
+    def test_password_length(self):
+        # simulate user input
+        with self.client:
+            response = self.client.post('/register', data=dict(
+                username='testuser',
+                password1='tiny',
+                password2='tiny'
+            ), follow_redirects=True)
+
+            # check if error message is displayed
+            self.assertIn(b'Password must be atleast 5 characters.', response.data)
+
+            # check if not redirected
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'Register', response.data)
+
+    
 class TestCompleteReg(unittest.TestCase):
     def setUp(self):
         self.app = create_app()
@@ -210,7 +311,7 @@ class TestCompleteReg(unittest.TestCase):
                 zipcode='9410561'
             ), follow_redirects=True)
 
+            
             self.assertEqual(response.status_code, 500)
-
 if __name__ == '__main__':
     unittest.main()

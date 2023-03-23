@@ -53,14 +53,14 @@ def register():
 
    
         user = Userlogin.query.filter_by(username=username).first()
-        if user:
+        if user: 
             flash('Username already exists.', category='error')
         elif len(username) < 5:
-            flash('Username must be greater than 5 characters.', category='error')
+            flash('Username must be atleast 5 characters.', category='error')
         elif password1 != password2:
             flash('Passwords do not match.', category='error')
         elif len(password1) < 5:
-            flash('Password must be greater than 5 characters.', category='error')
+            flash('Password must be atleast 5 characters.', category='error')
         else:
             new_user = Userlogin(username=username, password=generate_password_hash(
                 password1, method='sha256'), firstTime = True)
@@ -118,10 +118,10 @@ def completeReg():
         addr1 = request.form.get('address1')
         addr2 = request.form.get('address2')
         city = request.form.get('city')
-        state = request.form.get('statedropdown')
+        state = request.form.get('state-dropdown')
         zipcode = request.form.get('zipcode')
 
-        print(state)
+        
 
         if len(fullName) > 50:
             flash('Full Name cannot be longer than 50 characters',
