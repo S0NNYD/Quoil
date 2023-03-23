@@ -17,9 +17,9 @@ def login():
         user = Userlogin.query.filter_by(username=username).first()
         if user:
             if check_password_hash(user.password, password):
-                flash('Logged in Successfully!', category='success')
                 login_user(user, remember=True)
                 if user.firstTime == True:
+                    flash('Please complete your registration', category='success')
                     return redirect(url_for('authenciator.completeReg'))
                 else:
                     return redirect(url_for('viewer.home'))     

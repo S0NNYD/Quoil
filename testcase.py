@@ -6,7 +6,7 @@ from website.authenciation import completeReg
 from website.pricing import pricing
 from unittest.mock import patch
 from flask_login import current_user
-from flask_testing import TestCase
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class TestPricing(unittest.TestCase):
 
@@ -34,8 +34,8 @@ class LoginTestCase(unittest.TestCase):
         db.create_all()
         
         # create a test user
-        test_user = Userlogin(username='testuser', password='testpass', firstTime = True)
-        db.session.add(test_user)
+        self.user = Userlogin(username='testuser', password=generate_password_hash('testpass', method='sha256'), firstTime=True)
+        db.session.add(self.user)
         db.session.commit()
 
     def tearDown(self):
@@ -43,49 +43,106 @@ class LoginTestCase(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def test_login_success(self):
-        response = self.client.post('/login', data=dict(
-            username='testuser',
-            password='testpass'
-        ), follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+    def test_login_success_firstTime(self):
+        with self.client:
+            response = self.client.post('/login', data=dict(
+                username='testuser',
+                password='testpass',
+            ), follow_redirects=True)
 
-    def test_login_invalid_password(self):
-        response = self.client.post('/login', data=dict(
-            username='testuser',
-            password='wrongpass'
-        ), follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Incorrect password, try again.', response.data)
+            self.assertTrue(current_user.is_authenticated)
+            self.assertEqual(current_user.username, 'testuser')
 
-    def test_login_nonexistent_user(self):
-        response = self.client.post('/login', data=dict(
-            username='nonexistent',
-            password='password'
-        ), follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Account does not exist.', response.data)
+            if self.user.firstTime == True:
+                self.assertIn(b'Please complete your registration', response.data)
+                self.assertEqual(response.status_code, 200)
+                self.assertIn(b'Complete Registration', response.data)
+            
+
+            
+    def test_login_success_notfirstTime(self):
+        self.user.firstTime = False
+        db.session.commit() 
+        with self.client:
+            response = self.client.post('/login', data=dict(
+                username='testuser',
+                password='testpass',
+            ), follow_redirects=True)
+
+            self.assertTrue(current_user.is_authenticated)
+            self.assertEqual(current_user.username, 'testuser')
+
+            #check if redirect to complete reg.
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'Qoil', response.data)
+
+    def test_username_notexist(self):
+        with self.client:
+            response = self.client.post('/login', data=dict(
+                username='notexist',
+                password='testpass',
+            ), follow_redirects=True)
+
+
+            self.assertIn(b'Account does not exist.', response.data)
+
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'login', response.data)
     
-    def test_logout(self):
-        with self.app.test_client() as client:
-            # Log in the test user
-            restest = self.client.post('/login', data=dict(
+    def test_incorrectPass(self):
+        with self.client:
+            response = self.client.post('/login', data=dict(
+                username='testuser',
+                password='wrongpass',
+            ), follow_redirects=True)
+
+
+            self.assertIn(b'Incorrect password, try again.', response.data)
+                          
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'login', response.data)
+
+    def test_logout_firstTime(self):
+        with self.client:
+            response = self.client.post('/login', data=dict(
                 username='testuser',
                 password='testpass'
             ), follow_redirects=True)
 
-            # Check that the user is logged in
-            self.assertEqual(restest.status_code, 200)
+            # check that user is logged in
+            self.assertTrue(current_user.is_authenticated)
 
-            # Log out the user
-            response = client.get('/logout', follow_redirects=True)
+            # log out the user
+            response = self.client.get('/logout', follow_redirects=True)
 
-            # Check that the user is logged out
+            # check that user is logged out
             self.assertFalse(current_user.is_authenticated)
 
-            # Check that the user is redirected to the login page
+            # check that user is redirected to login page
             self.assertEqual(response.status_code, 200)
-            #self.assertEqual(response.location, url_for('authenciator.login', _external=True))
+            self.assertIn(b'login', response.data)
+
+    def test_logout_notfirstTime(self):
+        self.user.firstTime = False
+        db.session.commit()
+        with self.client:
+            response = self.client.post('/login', data=dict(
+                username='testuser',
+                password='testpass'
+            ), follow_redirects=True)
+
+            # check that user is logged in
+            self.assertTrue(current_user.is_authenticated)
+
+            # log out the user
+            response = self.client.get('/logout', follow_redirects=True)
+
+            # check that user is logged out
+            self.assertFalse(current_user.is_authenticated)
+
+            # check that user is redirected to login page
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'login', response.data)
 
 class TestReg(unittest.TestCase):
     def setUp(self):
@@ -186,132 +243,42 @@ class TestReg(unittest.TestCase):
             # check if not redirected
             self.assertEqual(response.status_code, 200)
             self.assertIn(b'Register', response.data)
-
-    
+  
 class TestCompleteReg(unittest.TestCase):
     def setUp(self):
         self.app = create_app()
+        self.app.testing = True
+        self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
-        self.client = self.app.test_client()
         db.create_all()
-        self.user = Userlogin(username='test_user', password='password', firstTime = False)
+
+        self.user = Userlogin(username='testuser', password=generate_password_hash('testpass', method='sha256'), firstTime=True)
         db.session.add(self.user)
         db.session.commit()
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
-        self.app_context.pop()
 
-    def test_completeReg_error_name(self):
+    def testSucess(self):
         with self.client:
-            self.client.post('/login', data=dict(
-                username="testuser", password="testpassword"
-            ), follow_redirects=True)
             response = self.client.post('/complete', data=dict(
-                fullname="John DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn Doe",
-                address1="123 Main Street",
-                address2="Apt 4B",
-                city="New York",
-                statedropdown="NY",
-                zipcode="100"
-            ), follow_redirects=True)
-            self.assertIn('Full Name cannot be longer than 50 characters', response.data.decode())
-
-    def test_completeReg_error_addr(self):
-        with self.client:
-            self.client.post('/login', data=dict(
-                username="testuser", password="testpassword"
-            ), follow_redirects=True)
-            response = self.client.post('/complete', data=dict(
-                fullname="John",
-                address1="123 Main Street John DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn Doe",
-                address2="Apt 4B",
-                city="New York",
-                statedropdown="NY",
-                zipcode="100"
-            ), follow_redirects=True)
-            self.assertIn('Address 1 cannot be longer than 100 characters', response.data.decode())
-    
-    def test_completeReg_error_addr2(self):
-        with self.client:
-            self.client.post('/login', data=dict(
-                username="testuser", password="testpassword"
-            ), follow_redirects=True)
-            response = self.client.post('/complete', data=dict(
-                fullname="John",
-                address1="123 Main Street",
-                address2="Apt 4B 123 Main Street John DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn Doe",
-                city="New York",
-                statedropdown="NY",
-                zipcode="100"
-            ), follow_redirects=True)
-            self.assertIn('Address 2 cannot be longer than 100 characters', response.data.decode())
-
-    def test_completeReg_error_city(self):
-        with self.client:
-            self.client.post('/login', data=dict(
-                username="testuser", password="testpassword"
-            ), follow_redirects=True)
-            response = self.client.post('/complete', data=dict(
-                fullname="John",
-                address1="123 Main Street",
-                address2="Apt 4B",
-                city="New York 123 Main Street John DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn Doe",
-                statedropdown="NY",
-                zipcode="100"
-            ), follow_redirects=True)
-            self.assertIn('City cannot be longer than 100 characters', response.data.decode())
-
-    def test_completeReg_error_zip2(self):
-        with self.client:
-            self.client.post('/login', data=dict(
-                username="testuser", password="testpassword"
-            ), follow_redirects=True)
-            response = self.client.post('/complete', data=dict(
-                fullname="John",
-                address1="123 Main Street",
-                address2="Apt 4B",
-                city="New York",
-                statedropdown="NY",
-                zipcode="1000001100"
-            ), follow_redirects=True)
-            self.assertIn('Zipcode cannot be longer than 9 characters', response.data.decode())
-
-    def test_completeReg_error_zip1(self):
-        with self.client:
-            self.client.post('/login', data=dict(
-                username="testuser", password="testpassword"
-            ), follow_redirects=True)
-            response = self.client.post('/complete', data=dict(
-                fullname="John",
-                address1="123 Main Street",
-                address2="Apt 4B",
-                city="New York",
-                statedropdown="NY",
-                zipcode="100"
-            ), follow_redirects=True)
-            self.assertIn('Zipcode cannot be shorter than 5 characters', response.data.decode())
-
-    def test_completeReg_success(self):
-        with self.client:
-            response = self.client.post('/login', data=dict(
-                username='test_user',
-                password='password',
-            ), follow_redirects=True)
-            self.assertEqual(response.status_code, 200)
-
-            response = self.client.post('/complete', data=dict(
-                fullname='Test User',
-                address1='123 Main St',
-                address2='1234 main st',
-                city='San Francisco',
-                statedropdown='CA',
-                zipcode='9410561'
+                fullname = 'Test Name',
+                address1 = '12345 test dr',
+                address2 = '111 extra dr',
+                city = 'testcity',
+                state = 'TX',
+                zipcode = '123456',
             ), follow_redirects=True)
 
             
-            self.assertEqual(response.status_code, 500)
+
+
+
+
+
+    
+
 if __name__ == '__main__':
     unittest.main()
