@@ -22,6 +22,7 @@ def login():
                     flash('Please complete your registration', category='success')
                     return redirect(url_for('authenciator.completeReg'))
                 else:
+                    flash('Login Successful!', category='success')
                     return redirect(url_for('viewer.home'))     
             else:
                 flash('Incorrect password, try again.', category='error')
