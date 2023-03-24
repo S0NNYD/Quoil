@@ -439,6 +439,17 @@ class test_form(unittest.TestCase):
             ), follow_redirects = True)
 
             self.assertIn(b'Number of gallons must be a valid integer', response.data)
+    def form_first_time(self):
+        self.user.firstTime = True
+        db.session.commit()
+
+        with self.client:
+            response = self.client.post('/form')
+
+            self.assertIn('Please complete your registration', response.data)
+
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'Complete Registration', response.data)
 
     def form_success(self):
         with self.client:
