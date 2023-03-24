@@ -91,10 +91,10 @@ def form():
         total_amount = request.form.get('total_amount')
 
 
-        if len(delivery_zipcode) < 1:
+        if len(delivery_zipcode) < 5:
             flash('Zipcode must be 5 characters.', category='error')
         elif gallons_req.isdigit() != True:
-            flash('Number of gallons must me a valid integer', category='error')
+            flash('Number of gallons must be a valid integer', category='error')
         else:
             new_quote_form = FuelQuote(
                 gallons_req=gallons_req, delivery_address1=delivery_address1, delivery_address2=delivery_address2,

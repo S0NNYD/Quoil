@@ -33,6 +33,6 @@ class FuelQuote(db.Model):
     delivery_address2 = db.Column(db.String(100))
     delivery_city = db.Column(db.String(100))
     delivery_state = db.Column(db.String(2))
-    delivery_zipcode = db.Column(db.Integer)
+    delivery_zipcode = db.Column(db.String(5))
     suggested_price = db.Column(db.Integer)
     total_amount = db.Column(db.Integer)
