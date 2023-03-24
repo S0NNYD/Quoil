@@ -24,6 +24,10 @@ header .logo
   text-transform: uppercase;
   cursor: pointer;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 .toggle
 {
   position: relative;
@@ -70,7 +74,11 @@ header .logo
   height: 100%;
   object-fit: cover;
   opacity: 0.8;
+<<<<<<< HEAD
 }
+=======
+} 
+>>>>>>> master
 .overlay
 {
   position: absolute;

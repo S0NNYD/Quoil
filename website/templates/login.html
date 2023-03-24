@@ -4,12 +4,18 @@
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&family=Poppins:wght@400;500;600&display=swap');
+<<<<<<< HEAD
     *{
+=======
+
+    * {
+>>>>>>> master
         margin: 0;
         padding: 0;
         box-sizing: border-box;
         font-family: "Poppins", sans-serif;
     }
+<<<<<<< HEAD
     body{
         margin: 0;
         padding: 0;
@@ -18,6 +24,18 @@
         overflow: hidden;
     }
     .center{
+=======
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #71b7e6, #b8dcb9);
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .center {
+>>>>>>> master
         position: absolute;
         top: 50%;
         left: 50%;
@@ -25,23 +43,45 @@
         width: 400px;
         background: white;
         border-radius: 10px;
+<<<<<<< HEAD
         box-shadow: 10px 10px 15px rgba(0,0,0,0.05);
     }
     .center h1{
+=======
+        box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .center h1 {
+>>>>>>> master
         text-align: center;
         padding: 20px 0;
         border-bottom: 1px solid silver;
     }
+<<<<<<< HEAD
     .center form{
         padding: 0 40px;
         box-sizing: border-box;
     }
     form .txt_field{
+=======
+
+    .center form {
+        padding: 0 40px;
+        box-sizing: border-box;
+    }
+
+    form .txt_field {
+>>>>>>> master
         position: relative;
         border-bottom: 2px solid #adadad;
         margin: 30px 0;
     }
+<<<<<<< HEAD
     .txt_field input{
+=======
+
+    .txt_field input {
+>>>>>>> master
         width: 100%;
         padding: 0 5px;
         height: 40px;
@@ -50,7 +90,12 @@
         background: none;
         outline: none;
     }
+<<<<<<< HEAD
     .txt_field label{
+=======
+
+    .txt_field label {
+>>>>>>> master
         position: absolute;
         top: 50%;
         left: 5px;
@@ -60,7 +105,12 @@
         pointer-events: none;
         transition: .5s;
     }
+<<<<<<< HEAD
     .txt_field span::before{
+=======
+
+    .txt_field span::before {
+>>>>>>> master
         content: '';
         position: absolute;
         top: 40px;
@@ -70,6 +120,7 @@
         background: #2691d9;
         transition: .5s;
     }
+<<<<<<< HEAD
     .txt_field input:focus ~ label,
     .txt_field input:valid ~ label{
         top: -5px;
@@ -80,14 +131,38 @@
         width: 100%;
     }
     .pass{
+=======
+
+    .txt_field input:focus~label,
+    .txt_field input:valid~label {
+        top: -5px;
+        color: #2691d9;
+    }
+
+    .txt_field input:focus~span::before,
+    .txt_field input:valid~span::before {
+        width: 100%;
+    }
+
+    .pass {
+>>>>>>> master
         margin: -5px 0 20px 5px;
         color: #a6a6a6;
         cursor: pointer;
     }
+<<<<<<< HEAD
     .pass:hover{
         text-decoration: underline;
     }
     input[type="submit"]{
+=======
+
+    .pass:hover {
+        text-decoration: underline;
+    }
+
+    input[type="submit"] {
+>>>>>>> master
         width: 100%;
         height: 50px;
         border: 1px solid;
@@ -99,26 +174,47 @@
         cursor: pointer;
         outline: none;
     }
+<<<<<<< HEAD
     input[type="submit"]:hover{
         border-color: #2691d9;
         transition: .5s;
     }
     .signup_link{
+=======
+
+    input[type="submit"]:hover {
+        border-color: #2691d9;
+        transition: .5s;
+    }
+
+    .signup_link {
+>>>>>>> master
         margin: 30px 0;
         text-align: center;
         font-size: 16px;
         color: #666666;
     }
+<<<<<<< HEAD
     .signup_link a{
         color: #2691d9;
         text-decoration: none;
     }
     .signup_link a:hover{
+=======
+
+    .signup_link a {
+        color: #2691d9;
+        text-decoration: none;
+    }
+
+    .signup_link a:hover {
+>>>>>>> master
         text-decoration: underline;
     }
 
     body {
         background-color: #757487;
+<<<<<<< HEAD
         /* background-image: url("https://images.pexels.com/photos/7130499/pexels-photo-7130499.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"); */
     }
 
@@ -166,4 +262,32 @@
     </div>
 
   </body>
+=======
+    }
+</style>
+
+<body>
+    <div class="center">
+        <h1>Login</h1>
+        <form method="POST">
+            <div class="txt_field">
+                <label for="username"></label>
+                <input type="username" class="form-control" id="username" name="username"
+                    placeholder="Enter Username" />
+            </div>
+            <div class="txt_field">
+                <label for="password"></label>
+                <input type="password" class="form-control" id="password" name="password"
+                    placeholder="Enter Password" />
+            </div>
+            <div class="pass">Forgot Password?</div>
+            <input type="submit" value="Login">
+            <div class="signup_link">
+                Not a member? <a href="/register">Signup</a>
+            </div>
+        </form>
+    </div>
+
+</body>
+>>>>>>> master
 {% endblock %}

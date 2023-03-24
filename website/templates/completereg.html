@@ -1,9 +1,293 @@
 {% extends "base.html" %} {% block title %} Form {% endblock %}
+<<<<<<< HEAD
 {% block content %}
 <br>
 <br>
 <br>
 
+=======
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+  
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+  
+    body {
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+  
+      background: linear-gradient(135deg, #71b7e6, #9b59b6);
+    }
+  
+    .container {
+      margin-top: 40px;
+      max-width: 700px;
+      width: 100%;
+      background-color: #fff;
+      padding: 25px 30px;
+      border-radius: 5px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    }
+  
+    .container .title {
+      font-size: 25px;
+      font-weight: 500;
+      position: relative;
+    }
+  
+    .container .title::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      width: 30px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #71b7e6, #9b59b6);
+    }
+  
+    .content form .user-details {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin: 20px 0 12px 0;
+    }
+  
+    form .user-details .input-box {
+      margin-bottom: 15px;
+      width: calc(100% / 2 - 20px);
+    }
+  
+    form .input-box span.details {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+  
+    .user-details .input-box input {
+      height: 45px;
+      width: 100%;
+      outline: none;
+      font-size: 16px;
+      border-radius: 5px;
+      padding-left: 15px;
+      border: 1px solid #ccc;
+      border-bottom-width: 2px;
+      transition: all 0.3s ease;
+    }
+  
+    .user-details .input-box input:focus,
+    .user-details .input-box input:valid {
+      border-color: #9b59b6;
+    }
+  
+    form .gender-details .gender-title {
+      font-size: 20px;
+      font-weight: 500;
+    }
+  
+    form .category {
+      display: flex;
+      width: 80%;
+      margin: 14px 0;
+      justify-content: space-between;
+    }
+  
+    form .category label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+  
+    form input[type="radio"] {
+      display: none;
+    }
+  
+    form .button {
+      height: 45px;
+      margin: 35px 0
+    }
+  
+    form .button input {
+      height: 100%;
+      width: 100%;
+      border-radius: 5px;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, #71b7e6, #9b59b6);
+    }
+  
+    form .button input:hover {
+      /* transform: scale(0.99); */
+      background: linear-gradient(-135deg, #71b7e6, #9b59b6);
+    }
+  
+    @media(max-width: 584px) {
+      .container {
+        max-width: 100%;
+      }
+  
+      form .user-details .input-box {
+        margin-bottom: 15px;
+        width: 100%;
+      }
+  
+      form .category {
+        width: 100%;
+      }
+  
+      .content form .user-details {
+        max-height: 300px;
+        overflow-y: scroll;
+      }
+  
+      .user-details::-webkit-scrollbar {
+        width: 5px;
+      }
+    }
+  
+    @media(max-width: 459px) {
+      .container .content .category {
+        flex-direction: column;
+      }
+    }
+  </style>
+
+<body>
+
+    <!DOCTYPE html>
+    <html lang="en" dir="ltr">
+  
+    <head>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="style.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+  
+    <body>
+      <div class="container">
+        <div class="title">Complete Registration</div>
+        <div class="content">
+          <form method="POST">
+            <div class="user-details">
+              <div class="input-box">
+                <span class="details">Full Name</span>
+                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Enter your full name" />
+              </div> 
+              <div class="input-box">
+                <span class="details">Address 1</span>
+                <input type="address" class="form-control" id="address1" name="address1"
+                  placeholder="Enter your Address" />
+              </div>
+              <div class="input-box">
+                <span class="details">Address 2</span>
+                <input type="address" class="form-control" id="address2" name="address2"
+                  placeholder="Optional" />
+              </div>
+              <div class="input-box">
+                <span class="details">City</span>
+                <input type="address" class="form-control" id="city" name="city" placeholder="City" />
+              </div>
+              <div class="input-box">
+                <span class="details">State</span>
+                <select name="statedropdown" id="statedropdown" class="form-control" style="width: 175px" placeholder="">
+                    <option value="" selected>Select a state</option>
+            
+                      <option value="AL">AL</option>
+                      <option value="AK">AK</option>
+                      <option value="AZ">AZ</option>
+                      <option value="AR">AR</option>
+                      <option value="AS">AS</option>
+                      <option value="CA">CA</option>
+                      <option value="CO">CO</option>
+                      <option value="CT">CT</option>
+                      <option value="DE">DE</option>
+                      <option value="DC">DC</option>
+                      <option value="FL">FL</option>
+                      <option value="GA">GA</option>
+                      <option value="GU">GU</option>
+                      <option value="HI">HI</option>
+                      <option value="ID">ID</option>
+                      <option value="IL">IL</option>
+                      <option value="IN">IN</option>
+                      <option value="IA">IA</option>
+                      <option value="KS">KS</option>
+                      <option value="KY">KY</option>
+                      <option value="LA">LA</option>
+                      <option value="ME">ME</option>
+                      <option value="MD">MD</option>
+                      <option value="MA">MA</option>
+                      <option value="MI">MI</option>
+                      <option value="MN">MN</option>
+                      <option value="MS">MS</option>
+                      <option value="MO">MO</option>
+                      <option value="MT">MT</option>
+                      <option value="NE">NE</option>
+                      <option value="NV">NV</option>
+                      <option value="NH">NH</option>
+                      <option value="NJ">NJ</option>
+                      <option value="NM">NM</option>
+                      <option value="NY">NY</option>
+                      <option value="NC">NC</option>
+                      <option value="ND">ND</option>
+                      <option value="MP">MP</option>
+                      <option value="OH">OH</option>
+                      <option value="OK">OK</option>
+                      <option value="OR">OR</option>
+                      <option value="PA">PA</option>
+                      <option value="PR">PR</option>
+                      <option value="RI">RI</option>
+                      <option value="SC">SC</option>
+                      <option value="SD">SD</option>
+                      <option value="TN">TN</option>
+                      <option value="TX">TX</option>
+                      <option value="TT">TT</option>
+                      <option value="UT">UT</option>
+                      <option value="VT">VT</option>
+                      <option value="VA">VA</option>
+                      <option value="VI">VI</option>
+                      <option value="WA">WA</option>
+                      <option value="WV">WV</option>
+                      <option value="WI">WI</option>
+                      <option value="WY">WY</option>
+                </select>
+              </div>
+              <div class="input-box">
+                <span class="details">Zipcode</span>
+                <input type="zipcode" class="form-control" id="zipcode" name="zipcode" placeholder="Zipcode" />
+              </div> 
+            </div>
+            <div class="button">
+              <input type="submit" value="Register">
+            </div>
+          </form>
+        </div>
+      </div>
+  
+    </body>
+  
+    </html>
+  </body>
+
+{% endblock %}
+
+
+
+
+<!-- 
+>>>>>>> master
 <form method="POST">
     <h3 align = "center"> Complete Registration </h3>
     <div class="form-group">
@@ -14,15 +298,25 @@
     <br>
 
     <div class="form-group">
+<<<<<<< HEAD
         <label for="address1">Adress 1</label>
         <input type="address" class="form-control" id="adress1" name="address1" placeholder="Required">
+=======
+        <label for="address1">Address 1</label>
+        <input type="address" class="form-control" id="address1" name="address1" placeholder="Required">
+>>>>>>> master
     </div>
 
     <br>
 
     <div class="form-group">
+<<<<<<< HEAD
         <label for="address2">Adress 2</label>
         <input type="address" class="form-control" id="adress2" name="address2" placeholder="Optional">
+=======
+        <label for="address2">Address 2</label>
+        <input type="address" class="form-control" id="address2" name="address2" placeholder="Optional">
+>>>>>>> master
     </div>
 
     <br>
@@ -35,8 +329,13 @@
     <br>
 
     <div class="form-group">
+<<<<<<< HEAD
         <label for="state-dropdown">Select a state:</label>
         <select id="state-dropdown" class="form-control">
+=======
+        <select name="state-dropdown" id="state-dropdown" class="form-control" style="width: 175px" placeholder="">
+        <option value="" selected>Select a state</option>
+>>>>>>> master
 
           <option value="AL">AL</option>
           <option value="AK">AK</option>
@@ -95,7 +394,11 @@
           <option value="WV">WV</option>
           <option value="WI">WI</option>
           <option value="WY">WY</option>
+<<<<<<< HEAD
           <!-- add more options for other states -->
+=======
+          
+>>>>>>> master
         </select>
       </div>
       
@@ -104,11 +407,20 @@
 
     <div class="form-group">
         <label for="zipcode">Zipcode</label>
+<<<<<<< HEAD
         <input type="state" class="form-control" id="zipcode" name="zipcode" placeholder="at least 5 digits required">
+=======
+        <input type="zipcode" class="form-control" id="zipcode" name="zipcode" placeholder="at least 5 digits required">
+>>>>>>> master
     </div>
 
     <br>
     <button type = "submit" class="btn btn-primary">Complete</button>
 
+<<<<<<< HEAD
 </form>
 {% endblock %}
+=======
+</form> -->
+
+>>>>>>> master
