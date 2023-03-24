@@ -1,7 +1,7 @@
 import unittest
 from website import create_app, db
 from flask import Flask, request, url_for,redirect
-from website.models import Userlogin, User
+from website.models import Userlogin, User, FuelQuote
 from website.authenciation import completeReg
 from website.pricing import pricing
 from unittest.mock import patch
@@ -361,6 +361,84 @@ class TestCompleteReg(unittest.TestCase):
 
             self.assertEqual(response.status_code, 200)
             self.assertIn(b'Qoil', response.data)
+
+
+class test_form(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app()
+        self.app.testing = True
+        self.client = self.app.test_client()
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
+        self.user = Userlogin(username='testuser', password=generate_password_hash('testpass', method='sha256'), firstTime=False)
+        db.session.add(self.user)
+        db.session.commit()
+
+        test_form = FuelQuote(gallons_req = 1000, 
+                              delivery_date = "3/29/2023",
+                              delivery_address1 = "1906 Makenna Lane", 
+                              delivery_address2 = "1205 5th St", 
+                              delivery_city = "Houston", 
+                              delivery_state = "TX", 
+                              delivery_zipcode = "77049", 
+                              suggested_price = "120", 
+                              total_amount = '1000000')
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
+
+    def form_success(self):
+        with self.client:
+
+            self.client.post('/login', data = dict(
+                username = 'testuser',
+                password = 'testpass'
+            ), follow_redirects=True)
+
+            response = self.client.post('/form', data=dict(
+                gallons_req = 1000, 
+                delivery_date = "3/29/2023",
+                delivery_address1 = "1906 Makenna Lane", 
+                delivery_address2 = "1205 5th St", 
+                delivery_city = "Houston", 
+                delivery_state = "TX", 
+                delivery_zipcode = "77049", 
+                suggested_price = 120, 
+                total_amount = 10000
+            ), follow_redirects = True)
+
+            myUser = Userlogin.query.filter_by(username = 'testuser').first()
+            self.assertIsNotNone(myUser.quotes)
+            self.assertEqual(myUser.quotes.gallons_req, 1000)
+            self.assertEqual(myUser.quotes.delivery_date, 3/29/2023)
+            self.assertEqual(myUser.quotes.delivery_address1, "1906 Makenna Lane")
+            self.assertEqual(myUser.quotes.delivery_address2, "1205 5th St")
+            self.assertEqual(myUser.quotes.delivery_state, "TX")
+            self.assertEqual(myUser.quotes.delivery_city, "Houston")
+            self.assertEqual(myUser.quotes.delivery_zipcode, "77049")
+            self.assertEqual(myUser.quotes.suggested_price, 120)
+            self.assertEqual(myUser.quotes.total_amount, 10000)
+
+            self.assertIn(b'Quote Requested!', response.data)
+            self.assertEqual(response.status_code, 200)
+            self.asserIn(b'Fuel Quote History Table', response.data)
+
+    def test_error_gal_amount(self):
+        response = self.client.post('/form', data = dict(
+            gallons_req = 1000, 
+            delivery_date = "3/29/2023",
+            delivery_address1 = "1906 Makenna Lane", 
+            delivery_address2 = "1205 5th St", 
+            delivery_city = "Houston", 
+            delivery_state = "TX", 
+            delivery_zipcode = "77049", 
+            suggested_price = "120", 
+            total_amount = '1000000'
+        ), follow_redirects = True
+        )
 
 
 
