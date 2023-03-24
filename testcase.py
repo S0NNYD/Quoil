@@ -359,7 +359,6 @@ class TestCompleteReg(unittest.TestCase):
 
             self.assertFalse(self.user.firstTime)
 
-
             self.assertEqual(response.status_code, 200)
             self.assertIn(b'Qoil', response.data)
 
