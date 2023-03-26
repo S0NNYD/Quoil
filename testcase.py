@@ -396,27 +396,7 @@ class test_form(unittest.TestCase):
                 self.assertIn(b'Complete Registration', response.data)
             
 
-    def test_error_zipcode(self):
-        with self.client:
-
-            self.client.post('/login', data = dict(
-                username = 'testuser',
-                password = 'testpass'
-            ), follow_redirects=True)
-
-            response = self.client.post('/form', data = dict(
-                gallons_req = 1000, 
-                delivery_date = "3/29/2023",
-                delivery_address1 = "1906 Makenna Lane", 
-                delivery_address2 = "1205 5th St", 
-                delivery_city = "Houston", 
-                delivery_state = "TX", 
-                delivery_zipcode = "7704", 
-                suggested_price = 120, 
-                total_amount = 1000000
-            ), follow_redirects = True)
-
-            self.assertIn(b'Zipcode must be 5 characters.', response.data)
+    
 
     def test_error_gal_amount(self):
         with self.client:
@@ -427,13 +407,7 @@ class test_form(unittest.TestCase):
             ), follow_redirects=True)
 
             response = self.client.post('/form', data=dict(
-                gallons_req = "something", 
-                delivery_date = "3/29/2023",
-                delivery_address1 = "1906 Makenna Lane", 
-                delivery_address2 = "1205 5th St", 
-                delivery_city = "Houston", 
-                delivery_state = "TX", 
-                delivery_zipcode = "77049", 
+                gallons_req = "something",  
                 suggested_price = 120, 
                 total_amount = 10000
             ), follow_redirects = True)
@@ -449,13 +423,7 @@ class test_form(unittest.TestCase):
             ), follow_redirects=True)
 
             response = self.client.post('/form', data=dict(
-                gallons_req = 1000, 
-                delivery_date = "03/29/2023",
-                delivery_address1 = "1906 Makenna Lane", 
-                delivery_address2 = "1205 5th St", 
-                delivery_city = "Houston", 
-                delivery_state = "TX", 
-                delivery_zipcode = "77049", 
+                gallons_req = 1000,  
                 suggested_price = 120, 
                 total_amount = 10000
             ), follow_redirects = True)
@@ -464,12 +432,6 @@ class test_form(unittest.TestCase):
             self.assertIsNotNone(myUser.quotes)
 
             self.assertEqual(myUser.quotes.gallons_req, 1000)
-            self.assertEqual(myUser.quotes.delivery_date, "03/29/2023")
-            self.assertEqual(myUser.quotes.delivery_address1, "1906 Makenna Lane")
-            self.assertEqual(myUser.quotes.delivery_address2, "1205 5th St")
-            self.assertEqual(myUser.quotes.delivery_city, "Houston")
-            self.assertEqual(myUser.quotes.delivery_state, "TX")
-            self.assertEqual(myUser.quotes.delivery_zipcode, "77049")
             self.assertEqual(myUser.quotes.suggested_price, 120)
             self.assertEqual(myUser.quotes.total_amount, 10000)
 

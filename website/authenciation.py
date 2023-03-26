@@ -81,24 +81,18 @@ def form():
         return redirect(url_for('authenciator.completeReg'))
     if request.method == 'POST':
         gallons_req = request.form.get('gallons_req')
-        delivery_address1 = request.form.get('delivery_address1')
-        delivery_address2 = request.form.get('delivery_address2')
-        delivery_state = request.form.get('delivery_state')
-        delivery_city = request.form.get('delivery_city')
-        delivery_zipcode = request.form.get('delivery_zipcode')
         delivery_date = request.form.get('delivery_date')
         suggested_price = request.form.get('suggested_price')
         total_amount = request.form.get('total_amount')
 
 
-        if len(delivery_zipcode) < 5:
-            flash('Zipcode must be 5 characters.', category='error')
-        elif gallons_req.isdigit() != True:
+        
+        if gallons_req.isdigit() != True:
             flash('Number of gallons must be a valid integer', category='error')
         else:
             new_quote_form = FuelQuote(
-                gallons_req=gallons_req, delivery_address1=delivery_address1, delivery_address2=delivery_address2,
-                delivery_state=delivery_state, delivery_city=delivery_city, delivery_zipcode=delivery_zipcode, delivery_date=delivery_date,
+                gallons_req=gallons_req, delivery_address1=current_user.userInfo.address, delivery_address2=current_user.userInfo.address2,
+                delivery_state=current_user.userInfo.state, delivery_city=current_user.userInfo.city, delivery_zipcode=current_user.userInfo.zipcode, delivery_date=delivery_date,
                 suggested_price=suggested_price, total_amount=total_amount, user_id=current_user.id)
             db.session.add(new_quote_form)
             db.session.commit()
