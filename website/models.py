@@ -2,7 +2,7 @@ from . import db  # database from __init__.py
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
-
+#table for client information
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fullname = db.Column(db.String(50))
@@ -13,6 +13,8 @@ class User(db.Model):
     zipcode = db.Column(db.String(5))
     loginId = db.Column(db.Integer, db.ForeignKey('userlogin.id'))
 
+
+#table for user credentials
 class Userlogin(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True)
@@ -22,8 +24,7 @@ class Userlogin(db.Model, UserMixin):
     quotes = db.relationship('FuelQuote')
     
 
-
-
+#table for fuel quote
 class FuelQuote(db.Model):
     quote_no = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('userlogin.id'))
