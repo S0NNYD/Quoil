@@ -1,3 +1,4 @@
+#class for pricing module
 class pricing:
 
     def __init__(self, location, history, gal_requested):

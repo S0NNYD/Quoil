@@ -8,6 +8,7 @@ from unittest.mock import patch
 from flask_login import current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
+#test case for pricing module
 class TestPricing(unittest.TestCase):
 
     def test_total_amount(self):
@@ -23,6 +24,7 @@ class TestPricing(unittest.TestCase):
         self.assertEqual(p1.total_amount(), total1)
         self.assertEqual(p2.total_amount(), total2)
 
+#test case for login and logout
 class LoginTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -144,6 +146,7 @@ class LoginTestCase(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertIn(b'login', response.data)
 
+#test case for user registration
 class TestReg(unittest.TestCase):
     def setUp(self):
         self.app = create_app()
@@ -243,7 +246,8 @@ class TestReg(unittest.TestCase):
             # check if not redirected
             self.assertEqual(response.status_code, 200)
             self.assertIn(b'Register', response.data)
-  
+
+#test case for client complete registration
 class TestCompleteReg(unittest.TestCase):
     def setUp(self):
         self.app = create_app()
@@ -362,7 +366,7 @@ class TestCompleteReg(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertIn(b'Qoil', response.data)
 
-
+#test case for fuel quote form
 class test_form(unittest.TestCase):
     def setUp(self):
         self.app = create_app()
@@ -394,9 +398,7 @@ class test_form(unittest.TestCase):
                 self.assertIn(b'Please complete your registration', response.data)
                 self.assertEqual(response.status_code, 200)
                 self.assertIn(b'Complete Registration', response.data)
-            
 
-    
 
     def test_error_gal_amount(self):
         with self.client:
