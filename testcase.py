@@ -406,11 +406,20 @@ class test_form(unittest.TestCase):
                 password = 'testpass'
             ), follow_redirects=True)
 
+            response = self.client.post('/complete', data=dict(
+                fullname='Test User',
+                address1='123 Main St',
+                address2='1234 main st',
+                city='San Francisco',
+                statedropdown='TX',
+                zipcode='9410561'
+            ), follow_redirects=True)
+
             response = self.client.post('/form', data=dict(
-                gallons_req = "something",  
-                suggested_price = 120, 
-                total_amount = 10000
+                gallons_req = "something" 
             ), follow_redirects = True)
+            
+            
 
             self.assertIn(b'Number of gallons must be a valid integer', response.data)
 

@@ -207,12 +207,12 @@
             <div class="input-box">
               <span class="details">Suggested Price</span>
               <input type="Suggested Price" class="form-control" id="suggested_price" name="suggested_price"
-                placeholder="Price Placeholder">
+              value="{{user.quotes.suggested_price}}" readonly>
             </div>
             <div class="input-box">
               <span class="details">Total Amount</span>
               <input type="Total Amount" class="form-control" id="total_amount" name="total_amount"
-                placeholder="Total Amount Placeholder">
+              value="{{user.quotes.total_amount}}" readonly>
             </div>
           </div>
       </div>
@@ -226,6 +226,22 @@
   </body>
 
   </html>
-
+  <script>
+    const gallonsInput = document.querySelector('#gallons_req');
+    const suggestedPriceInput = document.querySelector('#suggested_price');
+    const totalAmountInput = document.querySelector('#total_amount');
+  
+    gallonsInput.addEventListener('input', () => {
+      const gallons = parseInt(gallonsInput.value);
+      const url = `/get_price/${gallons}`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          suggestedPriceInput.value = data.suggested_price;
+          totalAmountInput.value = data.total_amount;
+        })
+        .catch(error => console.error(error));
+    });
+  </script>
 </body>
 {% endblock %}

@@ -95,8 +95,8 @@
           <td>{{quote.delivery_city}}</td>
           <td>{{quote.delivery_state}}</td>
           <td>{{quote.delivery_zipcode}}</td>
-          <td>{{quote.suggested_price}}</td>
-          <td>{{quote.total_amount}}</td>
+          <td>${{quote.suggested_price}}</td>
+          <td>${{quote.total_amount}}</td>
           <td><button class="delete" onclick="deleteQuote({{quote.quote_no}})">DELETE</button></td>
         </tr>
         {% endfor %}

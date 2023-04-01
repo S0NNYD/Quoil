@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db  # database from __init__.py
 from datetime import datetime
+from .pricing import *
 
 authenciator = Blueprint('authenciator', __name__)
 
@@ -82,14 +83,18 @@ def form():
     if request.method == 'POST':
         gallons_req = request.form.get('gallons_req')
         delivery_date = request.form.get('delivery_date')
-        suggested_price = request.form.get('suggested_price')
-        total_amount = request.form.get('total_amount')
-
 
         
         if gallons_req.isdigit() != True:
             flash('Number of gallons must be a valid integer', category='error')
+            priceModel = pricing(current_user.userInfo.state, True, -1)
+            suggested_price = priceModel.get_suggested_price()
+            total_amount = priceModel.total_amount()
+        
         else:
+            priceModel = pricing(current_user.userInfo.state, True, int(gallons_req))
+            suggested_price = priceModel.get_suggested_price()
+            total_amount = priceModel.total_amount()
             new_quote_form = FuelQuote(
                 gallons_req=gallons_req, delivery_address1=current_user.userInfo.address, delivery_address2=current_user.userInfo.address2,
                 delivery_state=current_user.userInfo.state, delivery_city=current_user.userInfo.city, delivery_zipcode=current_user.userInfo.zipcode, delivery_date=delivery_date,
@@ -98,11 +103,18 @@ def form():
             db.session.commit()
             flash("Quote Requested!", category='success')
             return redirect(url_for('viewer.history'))
-
         
-
+        return render_template("form.html", user=current_user, suggested_price=suggested_price, total_amount=total_amount)
+    
     return render_template("form.html", user=current_user)
 
+@authenciator.route('/get_price/<int:gallons>', methods=['GET'])
+@login_required
+def get_price(gallons):
+    priceModel = pricing(current_user.userInfo.state, True, gallons)
+    suggested_price = priceModel.get_suggested_price()
+    total_amount = priceModel.total_amount()
+    return {'suggested_price': suggested_price, 'total_amount': total_amount}
 
 @authenciator.route('/complete', methods=['GET', 'POST'])
 def completeReg():
