@@ -65,7 +65,7 @@ def register():
             flash('Password must be atleast 5 characters.', category='error')
         else:
             new_user = Userlogin(username=username, password=generate_password_hash(
-                password1, method='sha256'), firstTime = True)
+                password1, method='sha256'), firstTime = True, hasHistory = False )
             db.session.add(new_user)
             db.session.commit()
             flash('Account creation successful', category='success')
@@ -87,12 +87,14 @@ def form():
         
         if gallons_req.isdigit() != True:
             flash('Number of gallons must be a valid integer', category='error')
-            priceModel = pricing(current_user.userInfo.state, True, -1)
+            priceModel = pricing(current_user.userInfo.state, current_user.hasHistory, -1)
             suggested_price = priceModel.get_suggested_price()
             total_amount = priceModel.total_amount()
         
         else:
-            priceModel = pricing(current_user.userInfo.state, True, int(gallons_req))
+            priceModel = pricing(current_user.userInfo.state, current_user.hasHistory, int(gallons_req))
+            if not current_user.hasHistory:
+                current_user.hasHistory = True
             suggested_price = priceModel.get_suggested_price()
             total_amount = priceModel.total_amount()
             new_quote_form = FuelQuote(
@@ -102,6 +104,7 @@ def form():
             db.session.add(new_quote_form)
             db.session.commit()
             flash("Quote Requested!", category='success')
+
             return redirect(url_for('viewer.history'))
         
         return render_template("form.html", user=current_user, suggested_price=suggested_price, total_amount=total_amount)
@@ -111,7 +114,7 @@ def form():
 @authenciator.route('/get_price/<int:gallons>', methods=['GET'])
 @login_required
 def get_price(gallons):
-    priceModel = pricing(current_user.userInfo.state, True, gallons)
+    priceModel = pricing(current_user.userInfo.state, current_user.hasHistory, gallons)
     suggested_price = priceModel.get_suggested_price()
     total_amount = priceModel.total_amount()
     return {'suggested_price': suggested_price, 'total_amount': total_amount}

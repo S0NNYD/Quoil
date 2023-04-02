@@ -20,6 +20,7 @@ class Userlogin(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     firstTime = db.Column(db.Boolean)
+    hasHistory = db.Column(db.Boolean)
     userInfo = db.relationship('User', backref='userlogin', uselist=False)
     quotes = db.relationship('FuelQuote')
     

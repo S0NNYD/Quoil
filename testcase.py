@@ -36,7 +36,7 @@ class LoginTestCase(unittest.TestCase):
         db.create_all()
         
         # create a test user
-        self.user = Userlogin(username='testuser', password=generate_password_hash('testpass', method='sha256'), firstTime=True)
+        self.user = Userlogin(username='testuser', password=generate_password_hash('testpass', method='sha256'), firstTime=True, hasHistory = False)
         db.session.add(self.user)
         db.session.commit()
 
@@ -173,8 +173,12 @@ class TestReg(unittest.TestCase):
             user = Userlogin.query.filter_by(username='testuser').first()
             self.assertIsNotNone(user)
 
+            #check if hasHistory variable for user is set to false
+            self.assertFalse(user.hasHistory)
+
             # check if success message is displayed
             self.assertIn(b'Account creation successful', response.data)
+
 
             # check if redirected to login page
             self.assertEqual(response.status_code, 200)
@@ -375,7 +379,7 @@ class test_form(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
-        self.user = Userlogin(username='testuser', password=generate_password_hash('testpass', method='sha256'), firstTime=False)
+        self.user = Userlogin(username='testuser', password=generate_password_hash('testpass', method='sha256'), firstTime=False, hasHistory = False)
         db.session.add(self.user)
         db.session.commit()
 
@@ -425,30 +429,100 @@ class test_form(unittest.TestCase):
 
             self.assertIn(b'Number of gallons must be a valid integer', response.data)
 
-    def form_success(self):
+    def form_success_noHistory(self):
         with self.client:
-
             self.client.post('/login', data = dict(
                 username = 'testuser',
                 password = 'testpass'
             ), follow_redirects=True)
 
+            self.client.post('/complete', data=dict(
+                fullname='Test User',
+                address1='123 Main St',
+                address2='1234 main st',
+                city='San Francisco',
+                statedropdown='TX',
+                zipcode='9410561'
+            ), follow_redirects=True)
+
             response = self.client.post('/form', data=dict(
-                gallons_req = 1000,  
-                suggested_price = 120, 
-                total_amount = 10000
+                gallons_req = 1500,  
             ), follow_redirects = True)
 
             myUser = Userlogin.query.filter_by(username = 'testuser').first()
             self.assertIsNotNone(myUser.quotes)
 
-            self.assertEqual(myUser.quotes.gallons_req, 1000)
-            self.assertEqual(myUser.quotes.suggested_price, 120)
-            self.assertEqual(myUser.quotes.total_amount, 10000)
+            self.assertEqual(myUser.quotes.gallons_req, 1500)
+
+            self.assertEqual(myUser.quotes.suggested_price, 1.71)
+            self.assertEqual(myUser.quotes.total_amount, 2565)
+        
+
+            self.assertTrue(myUser.hasHistory)
 
             self.assertIn(b'Quote Requested!', response.data)
             self.assertEqual(response.status_code, 200)
             self.assertIn(b'Fuel Quote History Table', response.data)
+
+    def form_success_History(self):
+        with self.client:
+            self.user.hasHistory = True
+            self.client.post('/login', data = dict(
+                username = 'testuser',
+                password = 'testpass'
+            ), follow_redirects=True)
+
+            self.client.post('/complete', data=dict(
+                fullname='Test User',
+                address1='123 Main St',
+                address2='1234 main st',
+                city='San Francisco',
+                statedropdown='TX',
+                zipcode='9410561'
+            ), follow_redirects=True)
+
+            response = self.client.post('/form', data=dict(
+                gallons_req = 1500,  
+            ), follow_redirects = True)
+
+            myUser = Userlogin.query.filter_by(username = 'testuser').first()
+            self.assertIsNotNone(myUser.quotes)
+
+            self.assertEqual(myUser.quotes.gallons_req, 1500)
+
+            self.assertEqual(myUser.quotes.suggested_price, 1.695)
+            self.assertEqual(myUser.quotes.total_amount, 2542.5)
+        
+
+            self.assertTrue(myUser.hasHistory)
+
+            self.assertIn(b'Quote Requested!', response.data)
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'Fuel Quote History Table', response.data)
+    
+    def getPrice(self):
+
+        self.client.post('/login', data = dict(
+                username = 'testuser',
+                password = 'testpass'
+            ), follow_redirects=True)
+        
+        self.client.post('/complete', data=dict(
+                fullname='Test User',
+                address1='123 Main St',
+                address2='1234 main st',
+                city='Dallas',
+                statedropdown='TX',
+                zipcode='9410561'
+            ), follow_redirects=True)
+        
+        response = self.client.get(url_for('auth.get_price', gallons=100))
+
+        data = response.json
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('suggested_price', data)
+        self.assertIn('total_amount', data)
+
 
             
 if __name__ == '__main__':
