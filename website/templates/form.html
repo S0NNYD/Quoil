@@ -216,6 +216,9 @@
             </div>
           </div>
       </div>
+      <div class="button" id="quoteBtn">
+        <input type="quote" value="Quote">
+      </div>
       <div class="button">
         <input type="submit" value="Submit">
       </div>
@@ -227,11 +230,12 @@
 
   </html>
   <script>
+    const quoteBtn = document.querySelector('#quoteBtn');
     const gallonsInput = document.querySelector('#gallons_req');
     const suggestedPriceInput = document.querySelector('#suggested_price');
     const totalAmountInput = document.querySelector('#total_amount');
   
-    gallonsInput.addEventListener('input', () => {
+    quoteBtn.addEventListener('click', () => {
       const gallons = parseInt(gallonsInput.value);
       const url = `/get_price/${gallons}`;
       fetch(url)
