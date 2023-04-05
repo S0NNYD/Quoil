@@ -15,12 +15,11 @@
     height: 100vh;
     justify-content: center;
     align-items: center;
-
     background: linear-gradient(135deg, #f3f3f4, #e7e6e6);
   }
 
   .container {
-    margin-top: 18px;
+    /* margin-top: 18px; */
     max-width: 700px;
     width: 100%;
     background-color: #fff;
@@ -88,7 +87,7 @@
 
   form .category {
     display: flex;
-    width: 80%;
+    width: 100%;
     margin: 14px 0;
     justify-content: space-between;
   }
@@ -100,13 +99,13 @@
   }
 
   .button {
-    height: 85px;
-    margin: 35px 0
+    width: 47%;
+    height: 55px;
   }
 
   .button input {
-    height: 100%;
     width: 100%;
+    height: 100%;
     border-radius: 5px;
     border: none;
     color: #fff;
@@ -118,9 +117,34 @@
     background: linear-gradient(135deg, #e6f79e, #ac983f);
   }
 
+  #quoteBtn{
+    width: 47%;
+    height: 55px;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #87e7a2, #bebebe);
+    margin-bottom: 15px;
+  }
+
+  #quoteBtn:hover {
+    /* transform: scale(0.99); */
+    background: linear-gradient(-135deg, #e6abab, #106c2a);
+  }
+
   .button input:hover {
     /* transform: scale(0.99); */
     background: linear-gradient(-135deg, #ac983f, #e6f79e);
+  }
+
+  .buttons{
+    display: flex;
+    justify-content: space-between;
   }
 
   @media(max-width: 584px) {
@@ -216,11 +240,12 @@
             </div>
           </div>
       </div>
-      <div class="button" id="quoteBtn">
-        <input type="quote" value="Quote">
-      </div>
-      <div class="button">
-        <input type="submit" value="Submit">
+      
+      <div class="buttons">
+        <input id="quoteBtn" type="button" value="Quote">
+        <div class="button">
+          <input type="submit" value="Submit">
+        </div>
       </div>
       </form>
     </div>
