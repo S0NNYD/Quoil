@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %} Complete Registration {% endblock %}
+{% extends "base.html" %} {% block title %} Edit Profile {% endblock %}
 
 {% block content %}
 <style>
@@ -171,32 +171,32 @@
   
     <body>
       <div class="container">
-        <div class="title">Complete Registration</div>
+        <div class="title">Edit Profile</div>
         <div class="content">
           <form method="POST">
             <div class="user-details">
               <div class="input-box">
                 <span class="details">Full Name</span>
-                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Enter your full name" />
+                <input type="text" class="form-control" id="fullname" name="fullname" value="{{user.userInfo.fullname}}"/>
               </div> 
               <div class="input-box">
                 <span class="details">Address 1</span>
                 <input type="address" class="form-control" id="address1" name="address1"
-                  placeholder="Enter your Address" />
+                    value="{{user.userInfo.address}}" />
               </div>
               <div class="input-box">
                 <span class="details">Address 2</span>
                 <input type="address" class="form-control" id="address2" name="address2"
-                  placeholder="Optional" />
+                    value="{{user.userInfo.address2}}" />
               </div>
               <div class="input-box">
                 <span class="details">City</span>
-                <input type="address" class="form-control" id="city" name="city" placeholder="City" />
+                <input type="address" class="form-control" id="city" name="city" value="{{user.userInfo.city}}" />
               </div>
               <div class="input-box">
                 <span class="details">State</span>
                 <select name="statedropdown" id="statedropdown" class="form-control" style="width: 175px" placeholder="">
-                    <option value="" selected>Select a state</option>
+                    <option value="" selected>{{user.userInfo.state}}</option>
             
                       <option value="AL">AL</option>
                       <option value="AK">AK</option>
@@ -259,11 +259,11 @@
               </div>
               <div class="input-box">
                 <span class="details">Zipcode</span>
-                <input type="zipcode" class="form-control" id="zipcode" name="zipcode" placeholder="Zipcode" />
+                <input type="zipcode" class="form-control" id="zipcode" name="zipcode" value="{{user.userInfo.zipcode}}" />
               </div> 
             </div>
             <div class="button">
-              <input type="submit" value="Register">
+              <input type="submit" value="Submit">
             </div>
           </form>
         </div>
@@ -275,116 +275,3 @@
   </body>
 
 {% endblock %}
-
-
-
-
-<!-- 
-<form method="POST">
-    <h3 align = "center"> Complete Registration </h3>
-    <div class="form-group">
-        <label for="fullName">Full Name</label>
-        <input type="name" class="form-control" id="fullName" name="fullName" placeholder="First Last (Required)">
-    </div>
-
-    <br>
-
-    <div class="form-group">
-        <label for="address1">Address 1</label>
-        <input type="address" class="form-control" id="address1" name="address1" placeholder="Required">
-    </div>
-
-    <br>
-
-    <div class="form-group">
-        <label for="address2">Address 2</label>
-        <input type="address" class="form-control" id="address2" name="address2" placeholder="Optional">
-    </div>
-
-    <br>
-
-    <div class="form-group">
-        <label for="city">City</label>
-        <input type="city" class="form-control" id="city" name="city" placeholder="Required">
-    </div>
-
-    <br>
-
-    <div class="form-group">
-        <select name="state-dropdown" id="state-dropdown" class="form-control" style="width: 175px" placeholder="">
-        <option value="" selected>Select a state</option>
-
-          <option value="AL">AL</option>
-          <option value="AK">AK</option>
-          <option value="AZ">AZ</option>
-          <option value="AR">AR</option>
-          <option value="AS">AS</option>
-          <option value="CA">CA</option>
-          <option value="CO">CO</option>
-          <option value="CT">CT</option>
-          <option value="DE">DE</option>
-          <option value="DC">DC</option>
-          <option value="FL">FL</option>
-          <option value="GA">GA</option>
-          <option value="GU">GU</option>
-          <option value="HI">HI</option>
-          <option value="ID">ID</option>
-          <option value="IL">IL</option>
-          <option value="IN">IN</option>
-          <option value="IA">IA</option>
-          <option value="KS">KS</option>
-          <option value="KY">KY</option>
-          <option value="LA">LA</option>
-          <option value="ME">ME</option>
-          <option value="MD">MD</option>
-          <option value="MA">MA</option>
-          <option value="MI">MI</option>
-          <option value="MN">MN</option>
-          <option value="MS">MS</option>
-          <option value="MO">MO</option>
-          <option value="MT">MT</option>
-          <option value="NE">NE</option>
-          <option value="NV">NV</option>
-          <option value="NH">NH</option>
-          <option value="NJ">NJ</option>
-          <option value="NM">NM</option>
-          <option value="NY">NY</option>
-          <option value="NC">NC</option>
-          <option value="ND">ND</option>
-          <option value="MP">MP</option>
-          <option value="OH">OH</option>
-          <option value="OK">OK</option>
-          <option value="OR">OR</option>
-          <option value="PA">PA</option>
-          <option value="PR">PR</option>
-          <option value="RI">RI</option>
-          <option value="SC">SC</option>
-          <option value="SD">SD</option>
-          <option value="TN">TN</option>
-          <option value="TX">TX</option>
-          <option value="TT">TT</option>
-          <option value="UT">UT</option>
-          <option value="VT">VT</option>
-          <option value="VA">VA</option>
-          <option value="VI">VI</option>
-          <option value="WA">WA</option>
-          <option value="WV">WV</option>
-          <option value="WI">WI</option>
-          <option value="WY">WY</option>
-          
-        </select>
-      </div>
-      
-
-    <br>
-
-    <div class="form-group">
-        <label for="zipcode">Zipcode</label>
-        <input type="zipcode" class="form-control" id="zipcode" name="zipcode" placeholder="at least 5 digits required">
-    </div>
-
-    <br>
-    <button type = "submit" class="btn btn-primary">Complete</button>
-
-</form> -->
-

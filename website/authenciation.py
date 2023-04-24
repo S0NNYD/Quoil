@@ -159,5 +159,45 @@ def completeReg():
             flash('Account creation successful', category='success')
             return redirect(url_for('viewer.home'))
     
-
     return render_template("completereg.html", user = current_user)
+
+@authenciator.route('/edit', methods=['GET', 'POST'])
+@login_required
+def profileEdit():
+    if request.method == 'POST':
+
+        fullName = request.form.get('fullname')
+        addr1 = request.form.get('address1')
+        addr2 = request.form.get('address2')
+        city = request.form.get('city')
+        state = request.form.get('statedropdown')
+        zipcode = request.form.get('zipcode')
+
+        
+        if len(fullName) > 50:
+            flash('Full Name cannot be longer than 50 characters',
+                  category='error')
+        elif len(addr1) > 100:
+            flash('Address 1 cannot be longer than 100 characters',
+                  category='error')
+        elif len(addr2) > 100:
+            flash('Address 2 cannot be longer than 100 characters',
+                  category='error')
+        elif len(city) > 100:
+            flash('City cannot be longer than 100 characters', category='error')
+        elif len(zipcode) > 9:
+            flash('Zipcode cannot be longer than 9 characters', category='error')
+        elif len(zipcode) < 5:
+            flash('Zipcode cannot be shorter than 5 characters', category='error')
+        else:
+            # newUser = User(
+            #     fullname = fullName, address = addr1, address2 = addr2,
+            #     city = city, state = state, zipcode = zipcode, loginId = current_user.id
+            # )
+            # current_user.firstTime = False
+            # db.session.add(newUser)
+            # db.session.commit()
+            flash('Account edit successful', category='success')
+            #return redirect(url_for('viewer.home'))
+
+    return render_template("editprofile.html", user = current_user)
