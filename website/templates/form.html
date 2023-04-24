@@ -200,12 +200,12 @@
     <div class="container">
       <div class="title">Fuel Request Form</div>
       <div class="content">
-        <form method="POST">
+        <form id="myForm" method="POST">
           <div class="user-details">
             <div class="input-box">
               <span class="details">Full Gallons Requesting</span>
               <input type="Gallons Requested" class="form-control" id="gallons_req" name="gallons_req"
-                placeholder="Enter Amount">
+                placeholder="Enter Amount" required>
             </div>
             <div class="input-box">
               <span class="details">Delivery Address 1</span>
@@ -234,7 +234,7 @@
             </div>
             <div class="input-box">
               <span class="details">Delivery Date</span>
-              <input type="Date" class="form-control" id="delivery_date" name="delivery_date" placeholder="Enter Date">
+              <input type="Date" class="form-control" id="delivery_date" name="delivery_date" placeholder="Enter Date" required>
             </div>
             <div class="input-box">
               <span class="details">Suggested Price</span>
@@ -250,9 +250,9 @@
       </div>
       
       <div class="buttons">
-        <input id="quoteBtn" type="button" value="Quote">
+        <input id="quoteBtn" type="button" value="Quote" disabled>
         <div class="button">
-          <input type="submit" value="Submit">
+          <input id="myButton" type="submit" value="Submit" disabled>
         </div>
       </div>
       </form>
@@ -262,12 +262,24 @@
   </body>
 
   </html>
+
+  <script>
+    const myForm = document.getElementById('myForm');
+    const myButton = document.getElementById('myButton');
+    const quoteButton = document.getElementById('quoteBtn');
+  
+    myForm.addEventListener('input', () => {
+      myButton.disabled = !myForm.checkValidity();
+      quoteButton.disabled = !myForm.checkValidity();
+    });
+  </script>
+
   <script>
     const quoteBtn = document.querySelector('#quoteBtn');
     const gallonsInput = document.querySelector('#gallons_req');
     const suggestedPriceInput = document.querySelector('#suggested_price');
     const totalAmountInput = document.querySelector('#total_amount');
-  
+    
     quoteBtn.addEventListener('click', () => {
       const gallons = parseInt(gallonsInput.value);
       const url = `/get_price/${gallons}`;
