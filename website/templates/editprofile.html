@@ -177,26 +177,26 @@
             <div class="user-details">
               <div class="input-box">
                 <span class="details">Full Name</span>
-                <input type="text" class="form-control" id="fullname" name="fullname" value="{{user.userInfo.fullname}}"/>
+                <input type="text" class="form-control" id="fullnameE" name="fullnameE" value="{{user.userInfo.fullname}}"/>
               </div> 
               <div class="input-box">
                 <span class="details">Address 1</span>
-                <input type="address" class="form-control" id="address1" name="address1"
+                <input type="address" class="form-control" id="address1E" name="address1E"
                     value="{{user.userInfo.address}}" />
               </div>
               <div class="input-box">
                 <span class="details">Address 2</span>
-                <input type="address" class="form-control" id="address2" name="address2"
+                <input type="address" class="form-control" id="address2E" name="address2E"
                     value="{{user.userInfo.address2}}" />
               </div>
               <div class="input-box">
                 <span class="details">City</span>
-                <input type="address" class="form-control" id="city" name="city" value="{{user.userInfo.city}}" />
+                <input type="address" class="form-control" id="cityE" name="cityE" value="{{user.userInfo.city}}" />
               </div>
               <div class="input-box">
                 <span class="details">State</span>
-                <select name="statedropdown" id="statedropdown" class="form-control" style="width: 175px" placeholder="">
-                    <option value="" selected>{{user.userInfo.state}}</option>
+                <select name="statedropdownE" id="statedropdownE" class="form-control" style="width: 175px" placeholder="">
+                    <option value="{{user.userInfo.state}}" selected>{{user.userInfo.state}}</option>
             
                       <option value="AL">AL</option>
                       <option value="AK">AK</option>
@@ -259,7 +259,7 @@
               </div>
               <div class="input-box">
                 <span class="details">Zipcode</span>
-                <input type="zipcode" class="form-control" id="zipcode" name="zipcode" value="{{user.userInfo.zipcode}}" />
+                <input type="zipcode" class="form-control" id="zipcodeE" name="zipcodeE" value="{{user.userInfo.zipcode}}" />
               </div> 
             </div>
             <div class="button">

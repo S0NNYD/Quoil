@@ -166,38 +166,37 @@ def completeReg():
 def profileEdit():
     if request.method == 'POST':
 
-        fullName = request.form.get('fullname')
-        addr1 = request.form.get('address1')
-        addr2 = request.form.get('address2')
-        city = request.form.get('city')
-        state = request.form.get('statedropdown')
-        zipcode = request.form.get('zipcode')
+        editFullName = request.form.get('fullnameE')
+        editAddr1 = request.form.get('address1E')
+        editAddr2 = request.form.get('address2E')
+        editCity = request.form.get('cityE')
+        editState = request.form.get('statedropdownE')
+        editZipcode = request.form.get('zipcodeE')
 
         
-        if len(fullName) > 50:
+        if len(editFullName) > 50:
             flash('Full Name cannot be longer than 50 characters',
                   category='error')
-        elif len(addr1) > 100:
+        elif len(editAddr1) > 100:
             flash('Address 1 cannot be longer than 100 characters',
                   category='error')
-        elif len(addr2) > 100:
+        elif len(editAddr2) > 100:
             flash('Address 2 cannot be longer than 100 characters',
                   category='error')
-        elif len(city) > 100:
+        elif len(editCity) > 100:
             flash('City cannot be longer than 100 characters', category='error')
-        elif len(zipcode) > 9:
+        elif len(editZipcode) > 9:
             flash('Zipcode cannot be longer than 9 characters', category='error')
-        elif len(zipcode) < 5:
+        elif len(editZipcode) < 5:
             flash('Zipcode cannot be shorter than 5 characters', category='error')
         else:
-            # newUser = User(
-            #     fullname = fullName, address = addr1, address2 = addr2,
-            #     city = city, state = state, zipcode = zipcode, loginId = current_user.id
-            # )
-            # current_user.firstTime = False
-            # db.session.add(newUser)
-            # db.session.commit()
+            current_user.userInfo.fullname = editFullName
+            current_user.userInfo.address = editAddr1
+            current_user.userInfo.address2 = editAddr2
+            current_user.userInfo.city = editCity
+            current_user.userInfo.state = editState
+            current_user.userInfo.zipcode = editZipcode
+            db.session.commit()
             flash('Account edit successful', category='success')
-            #return redirect(url_for('viewer.home'))
 
     return render_template("editprofile.html", user = current_user)
