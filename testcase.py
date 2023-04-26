@@ -523,7 +523,179 @@ class test_form(unittest.TestCase):
         self.assertIn('suggested_price', data)
         self.assertIn('total_amount', data)
 
+#test case for edit profile
+class editProfile(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app()
+        self.app.testing = True
+        self.client = self.app.test_client()
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
+        self.user = Userlogin(username='testuser', password=generate_password_hash('testpass', method='sha256'), firstTime=False, hasHistory = False)
+        db.session.add(self.user)
+        db.session.commit()
 
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
+
+    def test_profile_edit_fullname_too_long(self):
+        self.client.post('/login', data = dict(
+                username = 'testuser',
+                password = 'testpass'
+            ), follow_redirects=True)
+ 
+        # Make a POST request to edit the profile with a fullname that's too long
+        response = self.client.post('/edit', data={
+            'fullnameE': 'This is a really long name that is more than fifty charactersThis is a really long name that is more than fifty characters',
+            'address1E': '123 Main St',
+            'address2E': '',
+            'cityE': 'Anytown',
+            'statedropdownE': 'CA',
+            'zipcodeE': '12345'
+        }, follow_redirects=True)
+        # Check that the response status code is 200 OK
+        self.assertEqual(response.status_code, 200)
+
+        # Check that the appropriate error message was flashed
+        self.assertIn(b'Full Name cannot be longer than 50 characters', response.data)
+
+    def test_editprof_error_addr(self):
+        self.client.post('/login', data = dict(
+                username = 'testuser',
+                password = 'testpass'
+            ), follow_redirects=True)
             
+        response = self.client.post('/edit', data={
+            'fullnameE': 'This is a',
+            'address1E': '123 Main St This is a really long name that is more than fifty charactersThis is a really long name that is more than fifty characters This is a really long name that is more than fifty charactersThis is a really long name that is more than fifty characters',
+            'address2E': '',
+            'cityE': 'Anytown',
+            'statedropdownE': 'CA',
+            'zipcodeE': '12345'
+        }, follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Address 1 cannot be longer than 100 characters', response.data)
+    
+    def test_editprof_error_addr2(self):
+        self.client.post('/login', data = dict(
+                username = 'testuser',
+                password = 'testpass'
+            ), follow_redirects=True)
+            
+        response = self.client.post('/edit', data={
+            'fullnameE': 'This is a',
+            'address1E': '123 Main St',
+            'address2E': '123 Main St This is a really long name that is more than fifty charactersThis is a really long name that is more than fifty characters This is a really long name that is more than fifty charactersThis is a really long name that is more than fifty characters',
+            'cityE': 'Anytown',
+            'statedropdownE': 'CA',
+            'zipcodeE': '12345'
+        }, follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Address 2 cannot be longer than 100 characters', response.data)
+
+    def test_editprof_error_city(self):
+        self.client.post('/login', data = dict(
+                username = 'testuser',
+                password = 'testpass'
+            ), follow_redirects=True)
+            
+        self.client.post('/complete', data=dict(
+                fullname='Test User',
+                address1='123 Main St',
+                address2='1234 main st',
+                city='Dallas',
+                statedropdown='TX',
+                zipcode='9410561'
+            ), follow_redirects=True)
+        
+        response = self.client.post('/edit', data={
+            'fullnameE': 'This is a',
+            'address1E': '123 Main St',
+            'address2E': '1 This y characters',
+            'cityE': 'New York 123 Main Street John DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn Doe',
+            'statedropdownE': 'CA',
+            'zipcodeE': '12345'
+        }, follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)    
+        self.assertIn(b'City cannot be longer than 100 characters', response.data)
+
+    def test_editprof_error_zip2(self):
+        self.client.post('/login', data = dict(
+                username = 'testuser',
+                password = 'testpass'
+            ), follow_redirects=True)
+            
+        response = self.client.post('/edit', data={
+            'fullnameE': 'This is a',
+            'address1E': '123 Main St',
+            'address2E': '1 This y characters',
+            'cityE': 'New York',
+            'statedropdownE': 'CA',
+            'zipcodeE': '12345567567'
+        }, follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)    
+        self.assertIn(b'Zipcode cannot be longer than 9 characters', response.data)
+
+    def test_editprof_error_zip1(self):
+        self.client.post('/login', data = dict(
+                username = 'testuser',
+                password = 'testpass'
+            ), follow_redirects=True)
+            
+        response = self.client.post('/edit', data={
+            'fullnameE': 'This is a',
+            'address1E': '123 Main St',
+            'address2E': '1 This y characters',
+            'cityE': 'New York',
+            'statedropdownE': 'CA',
+            'zipcodeE': '123'
+        }, follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)    
+        self.assertIn(b'Zipcode cannot be shorter than 5 characters', response.data)
+
+    def test_editprof_success(self):
+        self.client.post('/login', data = dict(
+                username = 'testuser',
+                password = 'testpass'
+            ), follow_redirects=True)
+        
+        response = self.client.post('/edit', data=dict(
+                fullname='Test User',
+                address1='123 Main St',
+                address2='1234 main st',
+                city='San Francisco',
+                statedropdown='TX',
+                zipcode='9410561'
+            ), follow_redirects=True)
+        
+        # response = self.client.post('/edit', data={
+        #     'fullnameE': 'Test User',
+        #     'address1E': '123 Main St',
+        #     'address2E': '1234 main st',
+        #     'cityE': 'San Francisco',
+        #     'statedropdownE': 'TX',
+        #     'zipcodeE': '9410561'
+        # }, follow_redirects=True)
+
+        myUser = Userlogin.query.filter_by(username = 'testuser').first()
+        self.assertIsNotNone(myUser.userInfo)
+        self.assertEqual(myUser.userInfo.fullname, 'Test User')
+        self.assertEqual(myUser.userInfo.address, '123 Main St')
+        self.assertEqual(myUser.userInfo.address2, '1234 main st')
+        self.assertEqual(myUser.userInfo.city, 'San Francisco')
+        self.assertEqual(myUser.userInfo.state, 'TX')
+        self.assertEqual(myUser.userInfo.zipcode, '9410561')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Edit', response.data)
+
 if __name__ == '__main__':
     unittest.main()
