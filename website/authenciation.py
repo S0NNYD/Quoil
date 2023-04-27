@@ -164,6 +164,10 @@ def completeReg():
 @authenciator.route('/edit', methods=['GET', 'POST'])
 @login_required
 def profileEdit():
+    if current_user.firstTime == True:
+        flash('Please complete your registration', category='error')
+        return redirect(url_for('authenciator.completeReg'))
+    
     if request.method == 'POST':
 
         editFullName = request.form.get('fullnameE')
